@@ -14,26 +14,57 @@ namespace APIBase.DAO.Factories
     /// </summary>
     public class DataAccessObjectsFactory : IDataAccessObjectsFactory
     {
-        /// <inheritdoc cref="IDataAccessObjectsFactory.BuildObservableRepository{TEntity}(DbContext, IRepository{TEntity})"/>
-        public IObservableRepository<TEntity> BuildObservableRepository<TEntity>(DbContext context, IRepository<TEntity> baseRepository = null) where TEntity : class, IGuidResolvable, IValidatable
+        /// <summary>
+        /// Create a new instance.
+        /// </summary>
+        /// <param name="context">The database context used by the factory</param>
+        /// <exception cref="ArgumentNullException">Occurs when <paramref name="context"/> is null</exception>
+        public DataAccessObjectsFactory(DbContext context)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            Context = context;
+        }
+
+        /// <summary>
+        /// Gets or sets the database context used by the factory.
+        /// </summary>
+        protected DbContext Context { get; init; }
+
+        /// <inheritdoc cref="IDataAccessObjectsFactory.BuildObservableRepository{TEntity}(IRepository{TEntity})"/>
+        /// <exception cref="ArgumentNullException">Occurs when <paramref name="baseRepository"/> is null</exception>
+        public IObservableRepository<TEntity> BuildObservableRepository<TEntity>(IRepository<TEntity> baseRepository) where TEntity : class, IGuidResolvable, IValidatable
         {
             if (baseRepository is null)
             {
-                baseRepository = BuildSimpleRepository<TEntity>(context);
+                throw new ArgumentNullException(nameof(baseRepository));
             }
             return new ObservableRepository<TEntity>(baseRepository);
         }
 
-        /// <inheritdoc cref="IDataAccessObjectsFactory.BuildRepositoryValidator(DbContext, IDictionary{Type, object})"/>
-        public IRepositoryValidator BuildRepositoryValidator(DbContext context, IDictionary<Type, object> repositories)
+        /// <inheritdoc cref="IDataAccessObjectsFactory.BuildObservableRepository{TEntity}(RepositorySourceType)"/>
+        public IObservableRepository<TEntity> BuildObservableRepository<TEntity>(RepositorySourceType sourceType) where TEntity : class, IGuidResolvable, IValidatable
         {
-            return new RepositoryValidator(context, repositories);
+            return BuildObservableRepository(BuildSimpleRepository<TEntity>(sourceType));
         }
 
-        /// <inheritdoc cref="IDataAccessObjectsFactory.BuildSimpleRepository{TEntity}(DbContext)"/>
-        public IRepository<TEntity> BuildSimpleRepository<TEntity>(DbContext context) where TEntity : class, IGuidResolvable, IValidatable
+        /// <inheritdoc cref="IDataAccessObjectsFactory.BuildRepositoryValidator(IDictionary{Type, object})"/>
+        public IRepositoryValidator BuildRepositoryValidator(IDictionary<Type, object> repositories)
         {
-            return new Repository<TEntity>(context);
+            return new RepositoryValidator(Context, repositories);
+        }
+
+        /// <inheritdoc cref="IDataAccessObjectsFactory.BuildSimpleRepository{TEntity}(RepositorySourceType)"/>
+        public IRepository<TEntity> BuildSimpleRepository<TEntity>(RepositorySourceType sourceType) where TEntity : class, IGuidResolvable, IValidatable
+        {
+            return sourceType switch
+            {
+                RepositorySourceType.DbContext => new ContextRepository<TEntity>(Context),
+                RepositorySourceType.Memory => new MemoryRepository<TEntity>(Context.Model.GetEntityTypes()),
+                _ => throw new NotSupportedException($"The source type {sourceType} is not supported by the {nameof(DataAccessObjectsFactory)}"),
+            };
         }
     }
 }

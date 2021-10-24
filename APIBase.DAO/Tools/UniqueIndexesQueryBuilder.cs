@@ -20,12 +20,12 @@ namespace APIBase.DAO.Tools
         /// <summary>
         /// Create a new instance.
         /// </summary>
-        /// <param name="context">The context to be used for the object initialization</param>
+        /// <param name="entityTypes">The entity types of the model</param>
         /// <exception cref="TypeLoadException">Occurs when TEntity is not in the context model</exception>
-        public UniqueIndexesQueryBuilder(DbContext context)
+        public UniqueIndexesQueryBuilder(IEnumerable<IEntityType> entityTypes)
         {
             Dictionary<IEntityType, IReadOnlyCollection<PropertyInfo>> entityTypesAndPrimaryKeys = new();
-            foreach (IEntityType entityType in context.Model.GetEntityTypes())
+            foreach (IEntityType entityType in entityTypes)
             {
                 List<PropertyInfo> keyProperties = null;
                 if (entityType.FindPrimaryKey() is IKey entityKey)

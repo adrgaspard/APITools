@@ -19,7 +19,7 @@ namespace APIBase.DAO.Repositories
     /// Context-based repository with synchronous and asynchronous operations for an identifiable and validatable object type.
     /// </summary>
     /// <typeparam name="TEntity">Type of the object to be stored with the repository</typeparam>
-    internal class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IGuidResolvable, IValidatable
+    internal class ContextRepository<TEntity> : IRepository<TEntity> where TEntity : class, IGuidResolvable, IValidatable
     {
         /// <summary>
         /// Create a new instance.
@@ -27,7 +27,7 @@ namespace APIBase.DAO.Repositories
         /// <param name="context">The context used by the repository</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="context"/> is null</exception>
         /// <exception cref="TypeLoadException">Occurs when TEntity is not a set type registered in the context</exception>
-        public Repository(DbContext context)
+        public ContextRepository(DbContext context)
         {
             Context = context;
             if (Context is null)
@@ -40,7 +40,7 @@ namespace APIBase.DAO.Repositories
                 throw new TypeLoadException($"The set of type {typeof(TEntity)} was not found in the context.");
             }
             RequiredProperties = new ReadOnlyCollection<PropertyInfo>(typeof(TEntity).GetProperties().Where((property) => Attribute.IsDefined(property, typeof(RequiredAttribute))).ToList());
-            UniqueIndexesQueryBuilder = new(context);
+            UniqueIndexesQueryBuilder = new(context.Model.GetEntityTypes());
         }
 
         /// <summary>

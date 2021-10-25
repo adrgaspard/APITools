@@ -11,12 +11,24 @@ using System.Threading.Tasks;
 
 namespace APIBase.ASPTools.Server.Controllers
 {
+    /// <summary>
+    /// Represents the base class for all restful controllers that use DTO to protect some data in the entities.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entities manipulated</typeparam>
+    /// <typeparam name="TMementoDTO">The type of the mementos used to save and restore certain states on entities, also used as a <typeparamref name="TEntity"/> DTO</typeparam>
     public abstract class DTORestfulController<TEntity, TMementoDTO> : ControllerBase, IRestfulController<TMementoDTO> where TEntity : class, IGuidResolvable, IValidatable, IOriginator<TMementoDTO>, new() where TMementoDTO : class, IGuidResolvable, IValidatable
     {
+        /// <summary>
+        /// Create a new instance.
+        /// </summary>
         protected DTORestfulController() : this(true)
         {
         }
 
+        /// <summary>
+        /// Create a new instance.
+        /// </summary>
+        /// <param name="automaticallySetRepositoryWithIoc">Whether the controller repository is to be automatically searched with the service locator or not</param>
         protected DTORestfulController(bool automaticallySetRepositoryWithIoc)
         {
             if (automaticallySetRepositoryWithIoc)
@@ -25,8 +37,12 @@ namespace APIBase.ASPTools.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets or sets the repository used by the controller.
+        /// </summary>
         protected IRepository<TEntity> Repository { get; init; }
 
+        /// <inheritdoc cref="IRestfulController{TEntity}.DeleteOne(Guid)"/>
         public virtual async Task<IActionResult> DeleteOne([FromRoute] Guid id)
         {
             TEntity entity = await Repository.FindOneAsync(id);
@@ -43,12 +59,14 @@ namespace APIBase.ASPTools.Server.Controllers
             return NoContent();
         }
 
+        /// <inheritdoc cref="IRestfulController{TEntity}.GetAll"/>
         public virtual async Task<ActionResult<IEnumerable<TMementoDTO>>> GetAll()
         {
             IEnumerable<TEntity> entities = await Repository.FindAllAsync();
             return new ActionResult<IEnumerable<TMementoDTO>>(entities.Select(entity => entity.CreateMemento()));
         }
 
+        /// <inheritdoc cref="IRestfulController{TEntity}.GetOne(Guid)"/>
         public virtual async Task<ActionResult<TMementoDTO>> GetOne([FromRoute] Guid id)
         {
             TEntity entity = await Repository.FindOneAsync(id);
@@ -59,6 +77,7 @@ namespace APIBase.ASPTools.Server.Controllers
             return entity.CreateMemento();
         }
 
+        /// <inheritdoc cref="IRestfulController{TEntity}.PatchOne(Guid, JsonPatchDocument{TEntity})"/>
         public virtual async Task<IActionResult> PatchOne([FromRoute] Guid id, [FromBody] JsonPatchDocument<TMementoDTO> patchDocument)
         {
             if (patchDocument is null)
@@ -88,6 +107,7 @@ namespace APIBase.ASPTools.Server.Controllers
             return new ObjectResult(entity);
         }
 
+        /// <inheritdoc cref="IRestfulController{TEntity}.PostOne(TEntity)"/>
         public virtual async Task<ActionResult<TMementoDTO>> PostOne([FromBody] TMementoDTO entity)
         {
             if (entity is null)
@@ -105,6 +125,7 @@ namespace APIBase.ASPTools.Server.Controllers
             return CreatedAtAction(nameof(GetOne), new { id = entity.Id }, entity);
         }
 
+        /// <inheritdoc cref="IRestfulController{TEntity}.PutOne(Guid, TEntity)"/>
         public virtual async Task<IActionResult> PutOne([FromRoute] Guid id, [FromBody] TMementoDTO entity)
         {
             if (entity is null)

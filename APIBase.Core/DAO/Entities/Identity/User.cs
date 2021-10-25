@@ -1,5 +1,4 @@
 ﻿using APIBase.Core.DAO.Models;
-using APIBase.Core.DAO.SerializationErrors;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;

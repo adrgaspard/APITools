@@ -7,15 +7,15 @@
     public interface IOriginator<TMemento>
     {
         /// <summary>
-        /// Installs the memento saved state on the object.
-        /// </summary>
-        /// <param name="memento">The memento to install</param>
-        void InstallMemento(TMemento memento);
-
-        /// <summary>
         /// Creates a memento based on the actual state of the object.
         /// </summary>
         /// <returns>The new memento</returns>
         TMemento CreateMemento();
+
+        /// <summary>
+        /// Installs the memento saved state on the object.
+        /// </summary>
+        /// <param name="memento">The memento to install</param>
+        void InstallMemento(TMemento memento);
     }
 }

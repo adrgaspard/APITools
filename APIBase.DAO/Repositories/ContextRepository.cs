@@ -151,7 +151,7 @@ namespace APIBase.DAO.Repositories
                 }
             }
             if (await IsAnyNotInDatabaseAsync(entities) is TEntity notFoundEntity)
-            { 
+            {
                 return new(notFoundEntity, new NotFoundInDatabase());
             }
             return new(null, null);

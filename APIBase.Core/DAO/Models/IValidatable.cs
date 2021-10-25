@@ -1,6 +1,4 @@
-﻿using APIBase.Core.DAO.SerializationErrors;
-
-namespace APIBase.Core.DAO.Models
+﻿namespace APIBase.Core.DAO.Models
 {
     /// <summary>
     /// Represents any object that can be validated for a potential add/update/delete in a serialization context.

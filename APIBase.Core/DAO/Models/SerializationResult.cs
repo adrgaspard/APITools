@@ -16,7 +16,7 @@ namespace APIBase.Core.DAO.Models
         /// <param name="sender">The entity that performed a serialization trial or test</param>
         /// <param name="error">The specified error of the result (set to null if the test/attempt was success)</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="sender"/> is null</exception>
-        protected internal SerializationResult(Entity sender, SerializationError error)
+        public SerializationResult(IGuidResolvable sender, SerializationError error)
         {
             if (sender is null)
             {
@@ -41,12 +41,12 @@ namespace APIBase.Core.DAO.Models
         /// Gets or sets the entity that performed a serialization trial or test.
         /// </summary>
         [JsonIgnore]
-        public Entity Sender { get; init; }
+        public IGuidResolvable Sender { get; init; }
 
         /// <summary>
         /// Gets the identifier of the entity that performed a serialization trial or test.
         /// </summary>
-        public Guid SenderId => Sender.Id;
+        public Guid? SenderId => Sender?.Id;
 
         /// <summary>
         /// Gets the type at string format of the entity that performed a serialization trial or test.

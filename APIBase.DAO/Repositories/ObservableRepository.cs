@@ -64,73 +64,73 @@ namespace APIBase.DAO.Repositories
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanDelete(TEntity)"/>
-        public bool CanDelete(TEntity entity)
+        public SerializationResult CanDelete(TEntity entity)
         {
             return BaseRepository.CanDelete(entity);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanDeleteAsync(TEntity)"/>
-        public async Task<bool> CanDeleteAsync(TEntity entity)
+        public async Task<SerializationResult> CanDeleteAsync(TEntity entity)
         {
             return await BaseRepository.CanDeleteAsync(entity);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanDeleteRange(IEnumerable{TEntity})"/>
-        public (bool, TEntity) CanDeleteRange(IEnumerable<TEntity> entities)
+        public SerializationResult CanDeleteRange(IEnumerable<TEntity> entities)
         {
             return BaseRepository.CanDeleteRange(entities);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanDeleteRangeAsync(IEnumerable{TEntity})"/>
-        public async Task<(bool, TEntity)> CanDeleteRangeAsync(IEnumerable<TEntity> entities)
+        public async Task<SerializationResult> CanDeleteRangeAsync(IEnumerable<TEntity> entities)
         {
             return await BaseRepository.CanDeleteRangeAsync(entities);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanSave(TEntity)"/>
-        public bool CanSave(TEntity entity)
+        public SerializationResult CanSave(TEntity entity)
         {
             return BaseRepository.CanSave(entity);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanSaveAsync(TEntity)"/>
-        public async Task<bool> CanSaveAsync(TEntity entity)
+        public async Task<SerializationResult> CanSaveAsync(TEntity entity)
         {
             return await BaseRepository.CanSaveAsync(entity);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanSaveRange(IEnumerable{TEntity})"/>
-        public (bool, TEntity) CanSaveRange(IEnumerable<TEntity> entities)
+        public SerializationResult CanSaveRange(IEnumerable<TEntity> entities)
         {
             return BaseRepository.CanSaveRange(entities);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanSaveRangeAsync(IEnumerable{TEntity})"/>
-        public async Task<(bool, TEntity)> CanSaveRangeAsync(IEnumerable<TEntity> entities)
+        public async Task<SerializationResult> CanSaveRangeAsync(IEnumerable<TEntity> entities)
         {
             return await BaseRepository.CanSaveRangeAsync(entities);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanUpdate(TEntity)"/>
-        public bool CanUpdate(TEntity entity)
+        public SerializationResult CanUpdate(TEntity entity)
         {
             return BaseRepository.CanUpdate(entity);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanUpdateAsync(TEntity)"/>
-        public async Task<bool> CanUpdateAsync(TEntity entity)
+        public async Task<SerializationResult> CanUpdateAsync(TEntity entity)
         {
             return await BaseRepository.CanUpdateAsync(entity);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanUpdateRange(IEnumerable{TEntity})"/>
-        public (bool, TEntity) CanUpdateRange(IEnumerable<TEntity> entities)
+        public SerializationResult CanUpdateRange(IEnumerable<TEntity> entities)
         {
             return BaseRepository.CanUpdateRange(entities);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanUpdateRangeAsync(IEnumerable{TEntity})"/>
-        public async Task<(bool, TEntity)> CanUpdateRangeAsync(IEnumerable<TEntity> entities)
+        public async Task<SerializationResult> CanUpdateRangeAsync(IEnumerable<TEntity> entities)
         {
             return await BaseRepository.CanUpdateRangeAsync(entities);
         }

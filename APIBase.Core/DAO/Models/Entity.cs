@@ -1,8 +1,6 @@
-﻿using APIBase.Core.DAO.SerializationErrors;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace APIBase.Core.DAO.Models
 {
@@ -19,7 +17,6 @@ namespace APIBase.Core.DAO.Models
         protected Entity()
         {
             Id = Guid.Empty;
-            SerializationResult = null;
         }
 
         /// <summary>
@@ -45,13 +42,6 @@ namespace APIBase.Core.DAO.Models
         }
 
         /// <summary>
-        /// Gets or sets the serialization result of the entity.
-        /// </summary>
-        [JsonIgnore]
-        [NotMapped]
-        public SerializationResult SerializationResult { get; protected set; }
-
-        /// <summary>
         /// Checks if two objects with an identifier are equal (the comparison will be made on their respective identifiers).
         /// </summary>
         /// <param name="left">The first object to compare</param>
@@ -75,15 +65,15 @@ namespace APIBase.Core.DAO.Models
         }
 
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
-        public virtual bool CanBeDeleted()
+        public virtual SerializationResult CanBeDeleted()
         {
-            return true;
+            return new(this, null);
         }
 
         /// <inheritdoc cref="IValidatable.CanBeSavedOrUpdated"/>
-        public virtual bool CanBeSavedOrUpdated()
+        public virtual SerializationResult CanBeSavedOrUpdated()
         {
-            return true;
+            return new(this, null);
         }
 
         /// <summary>
@@ -113,23 +103,6 @@ namespace APIBase.Core.DAO.Models
         public override int GetHashCode()
         {
             return HashCode.Combine(Id);
-        }
-
-        /// <inheritdoc cref="IValidatable.SetSerializationResultOnError(SerializationError)"/>
-        /// <exception cref="ArgumentNullException">Occurs when <paramref name="error"/> is null</exception>
-        public void SetSerializationResultOnError(SerializationError error)
-        {
-            if (error is null)
-            {
-                throw new ArgumentNullException(nameof(error));
-            }
-            SerializationResult = new SerializationResult(this, error);
-        }
-
-        /// <inheritdoc cref="IValidatable.SetSerializationResultOnSuccess"/>
-        public void SetSerializationResultOnSuccess()
-        {
-            SerializationResult = new SerializationResult(this, null);
         }
     }
 }

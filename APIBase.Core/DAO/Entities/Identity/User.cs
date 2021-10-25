@@ -26,33 +26,21 @@ namespace APIBase.Core.DAO.Entities.Identity
         public EntityAdapter<User> Adapter { get; protected init; }
 
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
-        public virtual bool CanBeDeleted()
+        public virtual SerializationResult CanBeDeleted()
         {
-            return true;
+            return new(this, null);
         }
 
         /// <inheritdoc cref="IValidatable.CanBeSavedOrUpdated"/>
-        public virtual bool CanBeSavedOrUpdated()
+        public virtual SerializationResult CanBeSavedOrUpdated()
         {
-            return true;
+            return new(this, null);
         }
 
         /// <inheritdoc cref="Entity.Equals(IGuidResolvable)"/>
         public bool Equals(IGuidResolvable other)
         {
             return Entity.AreEqual(this, other);
-        }
-
-        /// <inheritdoc cref="IValidatable.SetSerializationResultOnError(SerializationError)"/>
-        public void SetSerializationResultOnError(SerializationError error)
-        {
-            Adapter.SetSerializationResultOnError(error);
-        }
-
-        /// <inheritdoc cref="IValidatable.SetSerializationResultOnSuccess"/>
-        public void SetSerializationResultOnSuccess()
-        {
-            Adapter.SetSerializationResultOnSuccess();
         }
     }
 }

@@ -51,13 +51,13 @@ namespace APIBase.Core.DAO.Models
         }
 
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
-        public override bool CanBeDeleted()
+        public override SerializationResult CanBeDeleted()
         {
             return Adapted.CanBeDeleted();
         }
 
         /// <inheritdoc cref="IValidatable.CanBeSavedOrUpdated"/>
-        public override bool CanBeSavedOrUpdated()
+        public override SerializationResult CanBeSavedOrUpdated()
         {
             return Adapted.CanBeSavedOrUpdated();
         }

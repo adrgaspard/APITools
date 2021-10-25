@@ -30,19 +30,15 @@ namespace APIBase.Core.DAO.Repositories
         /// </summary>
         /// <param name="entity">The entity to check</param>
         /// <returns>A value that indicates whether the object can be deleted with the repository or not</returns>
-        /// <see cref="IValidatable.SetSerializationResultOnSuccess"/>
-        /// <see cref="IValidatable.SetSerializationResultOnError(SerializationErrors.SerializationError)"/>
-        Task<bool> CanDeleteAsync(TEntity entity);
+        Task<SerializationResult> CanDeleteAsync(TEntity entity);
 
         /// <summary>
         /// Checks asynchronously if some entities can be deleted with the repository.
         /// It also calls on the entity SetSerializationResultOnSuccess on entities that did not cause an error and/or SetSerializationResultOnError on the entity that caused the error.
         /// </summary>
         /// <param name="entities">The entities to check</param>
-        /// <returns>A tuple : the first value indicates whether the objects can be deleted with the repository or not, the second value is the entity that caused the error (null if the first value is true)</returns>
-        /// <see cref="IValidatable.SetSerializationResultOnSuccess"/>
-        /// <see cref="IValidatable.SetSerializationResultOnError(SerializationErrors.SerializationError)"/>
-        Task<(bool, TEntity)> CanDeleteRangeAsync(IEnumerable<TEntity> entities);
+        /// <returns>A value that indicates whether the objects can be deleted with the repository or not</returns>
+        Task<SerializationResult> CanDeleteRangeAsync(IEnumerable<TEntity> entities);
 
         /// <summary>
         /// Checks asynchronously if an entity can be saved with the repository.
@@ -50,19 +46,15 @@ namespace APIBase.Core.DAO.Repositories
         /// </summary>
         /// <param name="entity">The entity to check</param>
         /// <returns>A value that indicates whether the object can be saved with the repository or not</returns>
-        /// <see cref="IValidatable.SetSerializationResultOnSuccess"/>
-        /// <see cref="IValidatable.SetSerializationResultOnError(SerializationErrors.SerializationError)"/>
-        Task<bool> CanSaveAsync(TEntity entity);
+        Task<SerializationResult> CanSaveAsync(TEntity entity);
 
         /// <summary>
         /// Checks asynchronously if some entities can be saved with the repository.
         /// It also calls on the entity SetSerializationResultOnSuccess on entities that did not cause an error and/or SetSerializationResultOnError on the entity that caused the error.
         /// </summary>
         /// <param name="entities">The entities to check</param>
-        /// <returns>A tuple : the first value indicates whether the objects can be saved with the repository or not, the second value is the entity that caused the error (null if the first value is true)</returns>
-        /// <see cref="IValidatable.SetSerializationResultOnSuccess"/>
-        /// <see cref="IValidatable.SetSerializationResultOnError(SerializationErrors.SerializationError)"/>
-        Task<(bool, TEntity)> CanSaveRangeAsync(IEnumerable<TEntity> entities);
+        /// <returns>A value that indicates whether the objects can be saved with the repository or not</returns>
+        Task<SerializationResult> CanSaveRangeAsync(IEnumerable<TEntity> entities);
 
         /// <summary>
         /// Checks asynchronously if an entity can be updated with the repository.
@@ -70,19 +62,15 @@ namespace APIBase.Core.DAO.Repositories
         /// </summary>
         /// <param name="entity">The entity to check</param>
         /// <returns>A value that indicates whether the object can be updated with the repository or not</returns>
-        /// <see cref="IValidatable.SetSerializationResultOnSuccess"/>
-        /// <see cref="IValidatable.SetSerializationResultOnError(SerializationErrors.SerializationError)"/>
-        Task<bool> CanUpdateAsync(TEntity entity);
+        Task<SerializationResult> CanUpdateAsync(TEntity entity);
 
         /// <summary>
         /// Checks asynchronously if some entities can be updated with the repository.
         /// It also calls on the entity SetSerializationResultOnSuccess on entities that did not cause an error and/or SetSerializationResultOnError on the entity that caused the error.
         /// </summary>
         /// <param name="entities">The entities to check</param>
-        /// <returns>A tuple : the first value indicates whether the objects can be updated with the repository or not, the second value is the entity that caused the error (null if the first value is true)</returns>
-        /// <see cref="IValidatable.SetSerializationResultOnSuccess"/>
-        /// <see cref="IValidatable.SetSerializationResultOnError(SerializationErrors.SerializationError)"/>
-        Task<(bool, TEntity)> CanUpdateRangeAsync(IEnumerable<TEntity> entities);
+        /// <returns>A value that indicates whether the objects can be updated with the repository or not</returns>
+        Task<SerializationResult> CanUpdateRangeAsync(IEnumerable<TEntity> entities);
 
         /// <summary>
         /// Delete asynchronously an entity from the repository.
@@ -144,8 +132,6 @@ namespace APIBase.Core.DAO.Repositories
         /// <param name="entity">The entity to check</param>
         /// <returns>A value that
         /// whether the object can be saved with the repository or not</returns>
-        /// <see cref="IValidatable.SetSerializationResultOnSuccess"/>
-        /// <see cref="IValidatable.SetSerializationResultOnError(SerializationErrors.SerializationError)"/>
         Task<bool> IsInDatabaseAsync(TEntity entity);
 
         /// <summary>

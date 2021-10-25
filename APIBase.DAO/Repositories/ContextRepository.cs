@@ -92,311 +92,289 @@ namespace APIBase.DAO.Repositories
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanDelete(TEntity)"/>
-        public bool CanDelete(TEntity entity)
+        public SerializationResult CanDelete(TEntity entity)
         {
-            if (!entity.CanBeDeleted())
+            SerializationResult entityResult = entity.CanBeDeleted();
+            if (!entityResult.IsOk)
             {
-                return false;
+                return entityResult;
             }
             if (!IsInDatabase(entity))
             {
-                entity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return false;
+                return new(entity, new NotFoundInDatabase());
             }
-            entity.SetSerializationResultOnSuccess();
-            return true;
+            return new(entity, null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanDeleteAsync(TEntity)"/>
-        public async Task<bool> CanDeleteAsync(TEntity entity)
+        public async Task<SerializationResult> CanDeleteAsync(TEntity entity)
         {
-            if (!entity.CanBeDeleted())
+            SerializationResult entityResult = entity.CanBeDeleted();
+            if (!entityResult.IsOk)
             {
-                return false;
+                return entityResult;
             }
             if (!await IsInDatabaseAsync(entity))
             {
-                entity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return false;
+                return new(entity, new NotFoundInDatabase());
             }
-            entity.SetSerializationResultOnSuccess();
-            return true;
+            return new(entity, null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanDeleteRange(IEnumerable{TEntity})"/>
-        public (bool, TEntity) CanDeleteRange(IEnumerable<TEntity> entities)
+        public SerializationResult CanDeleteRange(IEnumerable<TEntity> entities)
         {
             foreach (TEntity entity in entities)
             {
-                if (!entity.CanBeDeleted())
+                SerializationResult entityResult = entity.CanBeDeleted();
+                if (!entityResult.IsOk)
                 {
-                    return (false, entity);
+                    return entityResult;
                 }
             }
             if (IsAnyNotInDatabase(entities) is TEntity notFoundEntity)
             {
-                notFoundEntity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return (false, notFoundEntity);
+                return new(notFoundEntity, new NotFoundInDatabase());
             }
-            return (true, null);
+            return new(null, null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanDeleteRangeAsync(IEnumerable{TEntity})"/>
-        public async Task<(bool, TEntity)> CanDeleteRangeAsync(IEnumerable<TEntity> entities)
+        public async Task<SerializationResult> CanDeleteRangeAsync(IEnumerable<TEntity> entities)
         {
             foreach (TEntity entity in entities)
             {
-                if (!entity.CanBeDeleted())
+                SerializationResult entityResult = entity.CanBeDeleted();
+                if (!entityResult.IsOk)
                 {
-                    return (false, entity);
+                    return entityResult;
                 }
             }
             if (await IsAnyNotInDatabaseAsync(entities) is TEntity notFoundEntity)
-            {
-                notFoundEntity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return (false, notFoundEntity);
+            { 
+                return new(notFoundEntity, new NotFoundInDatabase());
             }
-            return (true, null);
+            return new(null, null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanSave(TEntity)"/>
-        public bool CanSave(TEntity entity)
+        public SerializationResult CanSave(TEntity entity)
         {
-            if (!entity.CanBeSavedOrUpdated())
+            SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+            if (!entityResult.IsOk)
             {
-                return false;
+                return entityResult;
             }
             if (IsInDatabase(entity))
             {
-                entity.SetSerializationResultOnError(new AlreadyExistsInDatabase());
-                return false;
+                return new(entity, new AlreadyExistsInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                entity.SetSerializationResultOnError(requiredError);
-                return false;
+                return new(entity, requiredError);
             }
             if (AreUniqueIndexesRespected(entity, null) is SerializationError indexError)
             {
-                entity.SetSerializationResultOnError(indexError);
-                return false;
+                return new(entity, indexError);
             }
-            entity.SetSerializationResultOnSuccess();
-            return true;
+            return new(entity, null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanSaveAsync(TEntity)"/>
-        public async Task<bool> CanSaveAsync(TEntity entity)
+        public async Task<SerializationResult> CanSaveAsync(TEntity entity)
         {
-            if (!entity.CanBeSavedOrUpdated())
+            SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+            if (!entityResult.IsOk)
             {
-                return false;
+                return entityResult;
             }
             if (await IsInDatabaseAsync(entity))
             {
-                entity.SetSerializationResultOnError(new AlreadyExistsInDatabase());
-                return false;
+                return new(entity, new AlreadyExistsInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                entity.SetSerializationResultOnError(requiredError);
-                return false;
+                return new(entity, requiredError);
             }
             if (await AreUniqueIndexesRespectedAsync(entity, null) is SerializationError indexError)
             {
-                entity.SetSerializationResultOnError(indexError);
-                return false;
+                return new(entity, indexError);
             }
-            entity.SetSerializationResultOnSuccess();
-            return true;
+            return new(entity, null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanSaveRange(IEnumerable{TEntity})"/>
-        public (bool, TEntity) CanSaveRange(IEnumerable<TEntity> entities)
+        public SerializationResult CanSaveRange(IEnumerable<TEntity> entities)
         {
             foreach (TEntity entity in entities)
             {
-                if (!entity.CanBeSavedOrUpdated())
+                SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+                if (!entityResult.IsOk)
                 {
-                    return (false, entity);
+                    return entityResult;
                 }
             }
             if (IsAnyInDatabase(entities) is TEntity existingEntity)
             {
-                existingEntity.SetSerializationResultOnError(new AlreadyExistsInDatabase());
-                return (false, existingEntity);
+                return new(existingEntity, new AlreadyExistsInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    entity.SetSerializationResultOnError(requiredError);
-                    return (false, entity);
+                    return new(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (AreUniqueIndexesRespected(entity, entities) is SerializationError indexError)
                 {
-                    entity.SetSerializationResultOnError(indexError);
-                    return (false, entity);
+                    return new(entity, indexError);
                 }
             }
-            return (true, null);
+            return new(null, null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanSaveRangeAsync(IEnumerable{TEntity})"/>
-        public async Task<(bool, TEntity)> CanSaveRangeAsync(IEnumerable<TEntity> entities)
+        public async Task<SerializationResult> CanSaveRangeAsync(IEnumerable<TEntity> entities)
         {
             foreach (TEntity entity in entities)
             {
-                if (!entity.CanBeSavedOrUpdated())
+                SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+                if (!entityResult.IsOk)
                 {
-                    return (false, entity);
+                    return entityResult;
                 }
             }
             if (await IsAnyInDatabaseAsync(entities) is TEntity existingEntity)
             {
-                existingEntity.SetSerializationResultOnError(new AlreadyExistsInDatabase());
-                return (false, existingEntity);
+                return new(existingEntity, new AlreadyExistsInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    entity.SetSerializationResultOnError(requiredError);
-                    return (false, entity);
+                    return new(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (await AreUniqueIndexesRespectedAsync(entity, entities) is SerializationError indexError)
                 {
-                    entity.SetSerializationResultOnError(indexError);
-                    return (false, entity);
+                    return new(entity, indexError);
                 }
             }
-            return (true, null);
+            return new(null, null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanUpdate(TEntity)"/>
-        public bool CanUpdate(TEntity entity)
+        public SerializationResult CanUpdate(TEntity entity)
         {
-            if (!entity.CanBeSavedOrUpdated())
+            SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+            if (!entityResult.IsOk)
             {
-                return false;
+                return entityResult;
             }
             if (!IsInDatabase(entity))
             {
-                entity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return false;
+                return new(entity, new NotFoundInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                entity.SetSerializationResultOnError(requiredError);
-                return false;
+                return new(entity, requiredError);
             }
             if (AreUniqueIndexesRespected(entity, null) is SerializationError indexError)
             {
-                entity.SetSerializationResultOnError(indexError);
-                return false;
+                return new(entity, indexError);
             }
-            entity.SetSerializationResultOnSuccess();
-            return true;
+            return new(entity, null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanUpdateAsync(TEntity)"/>
-        public async Task<bool> CanUpdateAsync(TEntity entity)
+        public async Task<SerializationResult> CanUpdateAsync(TEntity entity)
         {
-            if (!entity.CanBeSavedOrUpdated())
+            SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+            if (!entityResult.IsOk)
             {
-                return false;
+                return entityResult;
             }
             if (!await IsInDatabaseAsync(entity))
             {
-                entity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return false;
+                return new(entity, new NotFoundInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                entity.SetSerializationResultOnError(requiredError);
-                return false;
+                return new(entity, requiredError);
             }
             if (await AreUniqueIndexesRespectedAsync(entity, null) is SerializationError indexError)
             {
-                entity.SetSerializationResultOnError(indexError);
-                return false;
+                return new(entity, indexError);
             }
-            entity.SetSerializationResultOnSuccess();
-            return true;
+            return new(entity, null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanUpdateRange(IEnumerable{TEntity})"/>
-        public (bool, TEntity) CanUpdateRange(IEnumerable<TEntity> entities)
+        public SerializationResult CanUpdateRange(IEnumerable<TEntity> entities)
         {
             foreach (TEntity entity in entities)
             {
-                if (!entity.CanBeSavedOrUpdated())
+                SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+                if (!entityResult.IsOk)
                 {
-                    return (false, entity);
+                    return entityResult;
                 }
             }
             if (IsAnyNotInDatabase(entities) is TEntity notFoundEntity)
             {
-                notFoundEntity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return (false, notFoundEntity);
+                return new(notFoundEntity, new NotFoundInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    entity.SetSerializationResultOnError(requiredError);
-                    return (false, entity);
+                    return new(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (AreUniqueIndexesRespected(entity, entities) is SerializationError indexError)
                 {
-                    entity.SetSerializationResultOnError(indexError);
-                    return (false, entity);
+                    return new(entity, indexError);
                 }
             }
-            return (true, null);
+            return new(null, null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanUpdateRangeAsync(IEnumerable{TEntity})"/>
-        public async Task<(bool, TEntity)> CanUpdateRangeAsync(IEnumerable<TEntity> entities)
+        public async Task<SerializationResult> CanUpdateRangeAsync(IEnumerable<TEntity> entities)
         {
             foreach (TEntity entity in entities)
             {
-                if (!entity.CanBeSavedOrUpdated())
+                SerializationResult entityResult = entity.CanBeSavedOrUpdated();
+                if (!entityResult.IsOk)
                 {
-                    return (false, entity);
+                    return entityResult;
                 }
             }
             if (await IsAnyNotInDatabaseAsync(entities) is TEntity notFoundEntity)
             {
-                notFoundEntity.SetSerializationResultOnError(new NotFoundInDatabase());
-                return (false, notFoundEntity);
+                return new(notFoundEntity, new NotFoundInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    entity.SetSerializationResultOnError(requiredError);
-                    return (false, entity);
+                    return new(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (await AreUniqueIndexesRespectedAsync(entity, entities) is SerializationError indexError)
                 {
-                    entity.SetSerializationResultOnError(indexError);
-                    return (false, entity);
+                    return new(entity, indexError);
                 }
             }
-            return (true, null);
+            return new(null, null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.Delete(TEntity)"/>

@@ -1,7 +1,9 @@
 ﻿using APIBase.Core.Throttling;
 using CommonServiceLocator;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ namespace APIBase.ASPTools.Server.Filters
     /// Represents a throttling policy assignation for a route.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class ThrottleAttribute : Attribute, IAsyncActionFilter
+    public class ThrottleAttribute : Attribute, IAsyncActionFilter, IHubFilter
     {
         /// <summary>
         /// Gets or sets the route concerned by the throttling policy.
@@ -52,21 +54,42 @@ namespace APIBase.ASPTools.Server.Filters
         /// <inheritdoc cref="IAsyncActionFilter.OnActionExecutionAsync(ActionExecutingContext, ActionExecutionDelegate)"/>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (ThrottleManager is null)
-            {
-                ThrottleManager = ServiceLocator.Current.GetInstance<IThrottleManager>();
-            }
+            VerifyThrottleMananger();
             CallInfo call = new() { ThrottlingPolicy = ThrottlingPolicy, Route = Route, Address = context.HttpContext.Response.HttpContext.Connection.RemoteIpAddress, SessionIdentity = context.HttpContext.Request.HttpContext.Connection.Id };
             if (!ThrottleManager.ValidateThrottleOnCall(call, IdentificationMode))
             {
                 context.Result = new ContentResult
                 {
-                    Content = $"Request limit is exceeded. Try again in {ThrottlingPolicy.RejectionPenaltyDelay} seconds.",
+                    Content = $"Request limit is exceeded, try again in {ThrottlingPolicy.RejectionPenaltyDelay} seconds",
                     StatusCode = (int)HttpStatusCode.TooManyRequests
                 };
                 return;
             }
             await next();
+        }
+
+        /// <inheritdoc cref="IHubFilter.InvokeMethodAsync(HubInvocationContext, Func{HubInvocationContext, ValueTask{object?}})"/>
+        public async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
+        {
+            VerifyThrottleMananger();
+            HttpContext httpContext = invocationContext.Context.GetHttpContext();
+            CallInfo call = new() { ThrottlingPolicy = ThrottlingPolicy, Route = Route, Address = httpContext?.Response.HttpContext.Connection.RemoteIpAddress, SessionIdentity = httpContext?.Request.HttpContext.Connection.Id };
+            if (!ThrottleManager.ValidateThrottleOnCall(call, IdentificationMode))
+            {
+                throw new HubException($"Request limit is exceeded, try again in {ThrottlingPolicy.RejectionPenaltyDelay} seconds");
+            }
+            return await next(invocationContext);
+        }
+
+        /// <summary>
+        /// Checks that the throttle manager of the object is not null. If it is null, it is retrieved from the service locator.
+        /// </summary>
+        protected void VerifyThrottleMananger()
+        {
+            if (ThrottleManager is null)
+            {
+                ThrottleManager = ServiceLocator.Current.GetInstance<IThrottleManager>();
+            }
         }
     }
 }

@@ -133,5 +133,12 @@ namespace APIBase.ASPTools.Server.Hubs
                     return;
             }
         }
+
+        /// <inheritdoc cref="Hub.OnDisconnectedAsync(Exception?)"/>
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            Subscriptions.Remove(Context.ConnectionId);
+            return base.OnDisconnectedAsync(exception);
+        }
     }
 }

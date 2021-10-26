@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using APIBase.Core.DAO.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,14 @@ namespace APIBase.ASPTools.Server.Controllers
     /// Represents the methods provided by a REST architecture.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity manipulated by the controller</typeparam>
-    public interface IRestfulController<TEntity> where TEntity : class
+    public interface IRestfulController<TEntity> where TEntity : class, IGuidResolvable
     {
         /// <summary>
         /// Deletes one item.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>An empty request result in case of success, an error otherwise</returns>
-        Task<IActionResult> DeleteOne([FromRoute] Guid id);
+        Task<IActionResult> DeleteOne(Guid id);
 
         /// <summary>
         /// Gets all items.
@@ -30,7 +31,7 @@ namespace APIBase.ASPTools.Server.Controllers
         /// </summary>
         /// <param name="id">The id of the wanted item</param>
         /// <returns>A request result that contains the item in case of success, an error otherwise</returns>
-        Task<ActionResult<TEntity>> GetOne([FromRoute] Guid id);
+        Task<ActionResult<TEntity>> GetOne(Guid id);
 
         /// <summary>
         /// Partially modifies an existing item.
@@ -38,14 +39,14 @@ namespace APIBase.ASPTools.Server.Controllers
         /// <param name="id">The id of the item to be edited</param>
         /// <param name="patchDocument">The modification patch to apply to the item</param>
         /// <returns>An empty request result in case of success, an error otherwise</returns>
-        Task<IActionResult> PatchOne([FromRoute] Guid id, [FromBody] JsonPatchDocument<TEntity> patchDocument);
+        Task<IActionResult> PatchOne(Guid id, JsonPatchDocument<TEntity> patchDocument);
 
         /// <summary>
         /// Creates a new item.
         /// </summary>
         /// <param name="entity">The new item</param>
         /// <returns>A request result that contains how to retrieve the created item in case of success, an error otherwise</returns>
-        Task<ActionResult<TEntity>> PostOne([FromBody] TEntity entity);
+        Task<ActionResult<TEntity>> PostOne(TEntity entity);
 
         /// <summary>
         /// Modifies an existing item.
@@ -53,6 +54,6 @@ namespace APIBase.ASPTools.Server.Controllers
         /// <param name="id">The id of the item to be edited</param>
         /// <param name="entity">The new version of the item</param>
         /// <returns>An empty request result in case of success, an error otherwise</returns>
-        Task<IActionResult> PutOne([FromRoute] Guid id, [FromBody] TEntity entity);
+        Task<IActionResult> PutOne(Guid id, TEntity entity);
     }
 }

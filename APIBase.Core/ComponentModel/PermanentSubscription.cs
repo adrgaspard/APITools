@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APIBase.Core.Tools;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -24,18 +25,19 @@ namespace APIBase.Core.ComponentModel
             SubscribeItemDelete = subscribeItemDelete;
             if (items is null)
             {
-                SubscribedItemsForUpdate = new ReadOnlyCollection<Guid>(new List<Guid>());
+                SubscribedItemsForUpdate = new List<Guid>();
             }
             else
             {
-                SubscribedItemsForUpdate = new ReadOnlyCollection<Guid>(new List<Guid>(items));
+                SubscribedItemsForUpdate = new List<Guid>(items);
             }
+            ReadOnlySubscribedItemsForUpdate = new ReadOnlyCollection<Guid>(SubscribedItemsForUpdate);
         }
 
         /// <summary>
         /// Gets a value that indicates wheter the subscription is empty (i.e. it is not affected by any change).
         /// </summary>
-        public bool IsEmpty => !SubscribeItemCreate && !SubscribeItemDelete && (SubscribedItemsForUpdate is null || SubscribedItemsForUpdate.Count == 0);
+        public bool IsEmpty => !SubscribeItemCreate && !SubscribeItemDelete && (ReadOnlySubscribedItemsForUpdate is null || ReadOnlySubscribedItemsForUpdate.Count == 0);
 
         /// <summary>
         /// Gets or sets a value that indicates whether the subscription will automatically subscribe to changes in added items.
@@ -44,10 +46,12 @@ namespace APIBase.Core.ComponentModel
         /// <see cref="SubscribeItemCreate"/>
         public bool SubscribeCreatedItemUpdate { get; protected set; }
 
+        public IList<Guid> SubscribedItemsForUpdate { get; protected set; }
+
         /// <summary>
         /// Gets or sets the list of all existing items identifiers concerned by the subscription.
         /// </summary>
-        public IReadOnlyCollection<Guid> SubscribedItemsForUpdate { get; protected set; }
+        public IReadOnlyCollection<Guid> ReadOnlySubscribedItemsForUpdate { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value that indicates whether the subscription is concerned by the addition of new items.
@@ -64,7 +68,7 @@ namespace APIBase.Core.ComponentModel
         /// </summary>
         /// <param name="subscription">The subscription to be copied</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="subscription"/> is null</exception>
-        public void CopyValues(ISubscription subscription)
+        public void SetValuesFrom(ISubscription subscription)
         {
             if (subscription is null)
             {
@@ -73,7 +77,8 @@ namespace APIBase.Core.ComponentModel
             SubscribeItemCreate = subscription.SubscribeItemCreate;
             SubscribeCreatedItemUpdate = subscription.SubscribeCreatedItemUpdate;
             SubscribeItemDelete = subscription.SubscribeItemDelete;
-            SubscribedItemsForUpdate = new ReadOnlyCollection<Guid>(new List<Guid>(subscription.SubscribedItemsForUpdate));
+            SubscribedItemsForUpdate.Clear();
+            SubscribedItemsForUpdate.AddRange(subscription.ReadOnlySubscribedItemsForUpdate);
         }
     }
 }

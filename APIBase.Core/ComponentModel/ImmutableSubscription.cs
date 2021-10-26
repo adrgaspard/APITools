@@ -9,6 +9,11 @@ namespace APIBase.Core.ComponentModel
     public class ImmutableSubscription : ISubscription
     {
         /// <summary>
+        /// Gets a value that indicates wheter the subscription is empty (i.e. it is not affected by any change).
+        /// </summary>
+        public bool IsEmpty => !SubscribeItemCreate && !SubscribeItemDelete && (ReadOnlySubscribedItemsForUpdate is null || ReadOnlySubscribedItemsForUpdate.Count == 0);
+
+        /// <summary>
         /// Gets or sets a value that indicates whether the subscription will automatically subscribe to changes in added items.
         /// Does not make sense if SubscribeItemCreate is false.
         /// </summary>
@@ -18,7 +23,7 @@ namespace APIBase.Core.ComponentModel
         /// <summary>
         /// Gets or sets the list of all existing items concerned by the subscription.
         /// </summary>
-        public IReadOnlyCollection<Guid> SubscribedItemsForUpdate { get; init; }
+        public IReadOnlyCollection<Guid> ReadOnlySubscribedItemsForUpdate { get; init; }
 
         /// <summary>
         /// Gets or sets a value that indicates whether the subscription is concerned by the addition of new items.

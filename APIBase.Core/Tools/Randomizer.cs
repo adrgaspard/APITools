@@ -17,7 +17,7 @@ namespace APIBase.Core.Tools
         public const string BasicsChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:/!^*+-_";
 
         /// <summary>
-        /// Create a new instance. Forbidden because the Randomizer class is not intended to be instantiated.
+        /// Creates a new instance. Forbidden because the Randomizer class is not intended to be instantiated.
         /// </summary>
         private Randomizer()
         {

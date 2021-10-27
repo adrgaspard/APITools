@@ -19,14 +19,14 @@ namespace APIBase.ASPTools.Server.Controllers
     public abstract class DTORestfulController<TEntity, TMementoDTO> : ControllerBase, IRestfulController<TMementoDTO> where TEntity : class, IGuidResolvable, IValidatable, IOriginator<TMementoDTO>, new() where TMementoDTO : class, IGuidResolvable, IValidatable
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         protected DTORestfulController() : this(true)
         {
         }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="automaticallySetRepositoryWithIoc">Whether the controller repository is to be automatically searched with the service locator or not</param>
         protected DTORestfulController(bool automaticallySetRepositoryWithIoc)

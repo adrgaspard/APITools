@@ -44,14 +44,14 @@ namespace APIBase.ASPTools.Server.Hubs
         protected IDictionary<string, (IClientProxy, PermanentSubscription)> Subscriptions { get; init; }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         protected RestfulHub() : this(true)
         {
         }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="automaticallySetRepositoryWithIoc">Whether the hub repository is to be automatically searched with the service locator or not</param>
         protected RestfulHub(bool automaticallySetRepositoryWithIoc)

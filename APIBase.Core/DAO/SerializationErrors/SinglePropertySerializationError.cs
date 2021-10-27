@@ -8,7 +8,7 @@ namespace APIBase.Core.DAO.SerializationErrors
     public abstract class SinglePropertySerializationError : SerializationError
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="property">The property affected by the error at string format</param>
         /// <exception cref="ArgumentException">Occurs when the property name is null, empty, or consists only of white-space characters</exception>

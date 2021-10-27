@@ -22,7 +22,7 @@ namespace APIBase.DAO.Repositories
     internal class ContextRepository<TEntity> : IRepository<TEntity> where TEntity : class, IGuidResolvable, IValidatable
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="context">The context used by the repository</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="context"/> is null</exception>

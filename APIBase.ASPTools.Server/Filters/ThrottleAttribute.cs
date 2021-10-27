@@ -37,7 +37,7 @@ namespace APIBase.ASPTools.Server.Filters
         protected IThrottleManager ThrottleManager { get; set; }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="route">The route concerned by the throttling policy</param>
         /// <param name="maxCallsBeforeReject">The number of possible calls from the endpoint before being rejected</param>

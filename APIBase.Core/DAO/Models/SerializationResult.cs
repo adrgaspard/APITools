@@ -11,7 +11,7 @@ namespace APIBase.Core.DAO.Models
     public class SerializationResult
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="sender">The entity that performed a serialization trial or test</param>
         /// <param name="error">The specified error of the result (set to null if the test/attempt was success)</param>

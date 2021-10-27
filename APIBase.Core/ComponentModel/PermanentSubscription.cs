@@ -12,7 +12,7 @@ namespace APIBase.Core.ComponentModel
     public class PermanentSubscription : ISubscription
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="subscribeItemCreate">Whether the subscription is concerned by the addition of new items</param>
         /// <param name="subscribeCreatedItemUpdate">Whether the subscription will automatically subscribe to changes in added items (does not make sense if SubscribeItemCreate is false)</param>

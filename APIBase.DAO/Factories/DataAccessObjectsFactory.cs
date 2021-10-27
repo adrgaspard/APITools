@@ -15,7 +15,7 @@ namespace APIBase.DAO.Factories
     public class DataAccessObjectsFactory : IDataAccessObjectsFactory
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="context">The database context used by the factory</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="context"/> is null</exception>

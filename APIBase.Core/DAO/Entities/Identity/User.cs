@@ -12,7 +12,7 @@ namespace APIBase.Core.DAO.Entities.Identity
     public class User : IdentityUser<Guid>, IAdaptedEntity<User>
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         public User()
         {

@@ -7,7 +7,7 @@
     public class UniqueIndexViolated<TIdentifier> : SerializationError where TIdentifier : struct
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="itemInConflictId">The identifier of the entity affected by the error</param>
         public UniqueIndexViolated(TIdentifier itemInConflictId)

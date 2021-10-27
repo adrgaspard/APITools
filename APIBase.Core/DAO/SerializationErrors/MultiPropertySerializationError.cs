@@ -11,7 +11,7 @@ namespace APIBase.Core.DAO.SerializationErrors
     public abstract class MultiPropertySerializationError : SerializationError
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="properties">The list of the properties affected by the error at string format</param>
         /// <exception cref="ArgumentException">Occurs when the list is null or empty, or when at least one property name is null, empty, or consists only of white-space characters</exception>

@@ -12,7 +12,7 @@ namespace APIBase.Core.DAO.Models
     public class EntityAdapter<TAdapted> : Entity where TAdapted : IAdaptedEntity<TAdapted>
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="adapted">The object to be adapted to the hierarchy chain of the Entity class</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="adapted"/> in null</exception>

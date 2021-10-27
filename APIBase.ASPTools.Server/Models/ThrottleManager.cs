@@ -20,7 +20,7 @@ namespace APIBase.ASPTools.Server.Models
         protected MemoryCache IpAddressCache { get; init; }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         public ThrottleManager()
         {

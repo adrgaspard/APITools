@@ -17,7 +17,7 @@ namespace APIBase.ASPTools.Client
         public string BaseAPIAddress { get; protected set; }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="baseAPIAddress">The base address of the API targetted by the client</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="baseAPIAddress"/> is null</exception>

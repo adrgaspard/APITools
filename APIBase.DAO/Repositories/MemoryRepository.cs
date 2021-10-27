@@ -22,7 +22,7 @@ namespace APIBase.DAO.Repositories
     internal class MemoryRepository<TEntity> : IRepository<TEntity> where TEntity : class, IGuidResolvable, IValidatable
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="entityTypes">The entity types of the model</param>
         /// <exception cref="TypeLoadException">Occurs when TEntity is not a set type registered in the context</exception>

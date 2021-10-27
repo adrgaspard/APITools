@@ -14,7 +14,7 @@ namespace APIBase.DAO.Tools
     internal class RepositoryValidator : IRepositoryValidator
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="context">The context to use</param>
         /// <param name="repositories">The repositories to be made known to the validator</param>

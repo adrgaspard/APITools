@@ -6,7 +6,7 @@
     public class PatternedStringAttributeViolated : SinglePropertySerializationError
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="property">The property affected by the error at string format</param>
         /// <param name="regexViolated">The regex that should match with the property value but don't</param>

@@ -18,14 +18,14 @@ namespace APIBase.ASPTools.Server.Controllers
     public abstract class SimpleRestfulController<TEntity, TMemento> : ControllerBase, IRestfulController<TEntity> where TEntity : class, IGuidResolvable, IValidatable, IOriginator<TMemento>
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         protected SimpleRestfulController() : this(true)
         {
         }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="automaticallySetRepositoryWithIoc">Whether the controller repository is to be automatically searched with the service locator or not</param>
         protected SimpleRestfulController(bool automaticallySetRepositoryWithIoc)

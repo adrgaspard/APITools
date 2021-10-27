@@ -12,7 +12,7 @@ namespace APIBase.Core.DAO.Models
         private Guid id;
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         protected Entity()
         {

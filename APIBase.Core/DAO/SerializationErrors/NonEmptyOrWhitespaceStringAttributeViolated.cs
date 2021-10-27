@@ -6,7 +6,7 @@
     public class NonEmptyOrWhitespaceStringAttributeViolated : SinglePropertySerializationError
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="property">The property affected by the error at string format</param>
         public NonEmptyOrWhitespaceStringAttributeViolated(string property) : base(property)

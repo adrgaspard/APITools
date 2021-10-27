@@ -10,14 +10,14 @@ namespace APIBase.Core.MVVM
     public abstract class ViewModel : ObservableObject, IDisposable
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         protected ViewModel() : this(WeakReferenceMessenger.Default)
         {
         }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="messenger">The Messenger instance to be used by the viewmodel</param>
         protected ViewModel(IMessenger messenger)

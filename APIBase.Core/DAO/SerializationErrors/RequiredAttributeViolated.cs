@@ -6,7 +6,7 @@
     public class RequiredAttributeViolated : SinglePropertySerializationError
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="property">The property affected by the error at string format</param>
         public RequiredAttributeViolated(string property) : base(property)

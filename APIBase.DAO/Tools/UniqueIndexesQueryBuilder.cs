@@ -18,7 +18,7 @@ namespace APIBase.DAO.Tools
     internal class UniqueIndexesQueryBuilder<TEntity>
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="entityTypes">The entity types of the model</param>
         /// <exception cref="TypeLoadException">Occurs when TEntity is not in the context model</exception>

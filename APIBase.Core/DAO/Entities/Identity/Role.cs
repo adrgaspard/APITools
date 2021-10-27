@@ -12,7 +12,7 @@ namespace APIBase.Core.DAO.Entities.Identity
     public class Role : IdentityRole<Guid>, IAdaptedEntity<Role>
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         public Role()
         {

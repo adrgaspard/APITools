@@ -16,7 +16,7 @@ namespace APIBase.DAO.Repositories
     internal class ObservableRepository<TEntity> : IObservableRepository<TEntity> where TEntity : class, IGuidResolvable, IValidatable
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="baseRepository">The base repository used by the repository</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="baseRepository"/> is null</exception>

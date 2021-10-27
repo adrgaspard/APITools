@@ -16,7 +16,7 @@ namespace APIBase.Core.Ioc
         protected const string ConstructorName = ".cctor";
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         public IocContainer()
         {

@@ -14,7 +14,7 @@ namespace APIBase.Core.Ioc
         protected IServiceLocator BaseServiceLocator { get; init; }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="baseServiceLocator">The base service locator to use</param>
         public IocProxy(IServiceLocator baseServiceLocator)

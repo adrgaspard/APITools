@@ -11,12 +11,12 @@ namespace APIBase.ASPTools.Requests.C2SMessages
     public class UpdateSubscriptionRequest : ISubscription
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         public UpdateSubscriptionRequest() { }
 
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="model">The subscription to be copied</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="model"/> is null</exception>

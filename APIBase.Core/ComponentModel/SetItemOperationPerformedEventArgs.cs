@@ -12,7 +12,7 @@ namespace APIBase.Core.ComponentModel
     public class SetItemOperationPerformedEventArgs<TItemId> : EventArgs
     {
         /// <summary>
-        /// Create a new instance.
+        /// Creates a new instance.
         /// </summary>
         /// <param name="operationType">Type of the operation</param>
         /// <param name="impactedItemsIds">List of identifiers of all items impacted by the operation</param>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace APIBase.ASPTools.Server.Controllers
 {
     /// <summary>
-    /// Represents the methods provided by a REST architecture.
+    /// Represents the methods provided by a REST server-side architecture.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity manipulated by the controller</typeparam>
     public interface IRestfulController<TEntity> where TEntity : class, IGuidResolvable

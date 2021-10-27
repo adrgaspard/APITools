@@ -15,7 +15,7 @@ namespace APIBase.ASPTools.Client
     /// Represents the base class for a web client with the methods provided by a REST client-side architecture.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity manipulated by the client</typeparam>
-    public class RestfulWebClient<TEntity> where TEntity : class, IGuidResolvable
+    public class RestfulControllerClient<TEntity> where TEntity : class, IGuidResolvable
     {
         /// <summary>
         /// Gets or sets the http client used to communicate.
@@ -34,7 +34,7 @@ namespace APIBase.ASPTools.Client
         /// <param name="routesBaseAddress">The base address for the routes (in general cases, it's the name of the corresponding server controller)</param>
         /// <exception cref="ArgumentNullException">Occurs when <paramref name="routesBaseAddress"/> is null</exception>
         /// <exception cref="InvalidOperationException">Occurs when the http client is not registered in the service locator</exception>
-        public RestfulWebClient(bool automaticallySetHttpClientWithIoc, string routesBaseAddress)
+        public RestfulControllerClient(bool automaticallySetHttpClientWithIoc, string routesBaseAddress)
         {
             if (routesBaseAddress is null)
             {
@@ -57,7 +57,7 @@ namespace APIBase.ASPTools.Client
         /// <param name="httpClient">The provided http client</param>
         /// <param name="routesBaseAddress">The base address for the routes (in general cases, it's the name of the corresponding server controller)</param>
         /// <exception cref="ArgumentNullException">>Occurs when <paramref name="httpClient"/> or <paramref name="routesBaseAddress"/> is null</exception>
-        public RestfulWebClient(HttpClient httpClient, string routesBaseAddress) : this(false, routesBaseAddress)
+        public RestfulControllerClient(HttpClient httpClient, string routesBaseAddress) : this(false, routesBaseAddress)
         {
             if (httpClient is null)
             {

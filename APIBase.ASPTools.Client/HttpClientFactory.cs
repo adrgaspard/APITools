@@ -10,9 +10,8 @@ namespace APIBase.ASPTools.Client
     /// </summary>
     public class HttpClientFactory : IHttpClientFactory
     {
-
         /// <summary>
-        /// 0ets or sets the base address of the API targetted by the client
+        /// Gets or sets the base address of the API targetted by the client.
         /// </summary>
         public string BaseAPIAddress { get; protected set; }
 

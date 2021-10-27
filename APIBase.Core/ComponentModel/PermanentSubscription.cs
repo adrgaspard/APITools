@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace APIBase.Core.ComponentModel
 {
@@ -9,7 +10,7 @@ namespace APIBase.Core.ComponentModel
     /// Represents a permanent subscription to changes in a set of objects.
     /// It can evolve over time.
     /// </summary>
-    public class PermanentSubscription : ISubscription
+    public class PermanentSubscription : ISubscription, INotifyPropertyChanged
     {
         /// <summary>
         /// Creates a new instance.
@@ -44,24 +45,27 @@ namespace APIBase.Core.ComponentModel
         /// Does not make sense if SubscribeItemCreate is false.
         /// </summary>
         /// <see cref="SubscribeItemCreate"/>
-        public bool SubscribeCreatedItemUpdate { get; protected set; }
+        public bool SubscribeCreatedItemUpdate { get; private set; }
 
-        public IList<Guid> SubscribedItemsForUpdate { get; protected set; }
+        public IList<Guid> SubscribedItemsForUpdate { get; private set; }
 
         /// <summary>
         /// Gets or sets the list of all existing items identifiers concerned by the subscription.
         /// </summary>
-        public IReadOnlyCollection<Guid> ReadOnlySubscribedItemsForUpdate { get; protected set; }
+        public IReadOnlyCollection<Guid> ReadOnlySubscribedItemsForUpdate { get; private set; }
 
         /// <summary>
         /// Gets or sets a value that indicates whether the subscription is concerned by the addition of new items.
         /// </summary>
-        public bool SubscribeItemCreate { get; protected set; }
+        public bool SubscribeItemCreate { get; private set; }
 
         /// <summary>
         /// Gets or sets a value that indicates whether the subscription is concerned by the deletion of existing items.
         /// </summary>
-        public bool SubscribeItemDelete { get; protected set; }
+        public bool SubscribeItemDelete { get; private set; }
+
+        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Copies and sets values from another subscription.
@@ -79,6 +83,7 @@ namespace APIBase.Core.ComponentModel
             SubscribeItemDelete = subscription.SubscribeItemDelete;
             SubscribedItemsForUpdate.Clear();
             SubscribedItemsForUpdate.AddRange(subscription.ReadOnlySubscribedItemsForUpdate);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
         }
     }
 }

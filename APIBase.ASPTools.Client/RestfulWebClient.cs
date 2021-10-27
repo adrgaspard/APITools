@@ -1,4 +1,5 @@
-﻿using APIBase.Core.DAO.Models;
+﻿using APIBase.ASPTools.Base;
+using APIBase.Core.DAO.Models;
 using APIBase.Core.Ioc;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -10,19 +11,29 @@ using System.Threading.Tasks;
 
 namespace APIBase.ASPTools.Client
 {
+    /// <summary>
+    /// Represents the base class for a web client with the methods provided by a REST client-side architecture.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity manipulated by the client</typeparam>
     public class RestfulWebClient<TEntity> where TEntity : class, IGuidResolvable
     {
+        /// <summary>
+        /// Gets or sets the http client used to communicate.
+        /// </summary>
         protected HttpClient HttpClient { get; init; }
 
+        /// <summary>
+        /// Gets or sets the base address for the routes (in general cases, it's the name of the corresponding server controller).
+        /// </summary>
         public string RoutesBaseAddress { get; protected init; }
 
         /// <summary>
-        /// 
+        /// Creates a new instance.
         /// </summary>
-        /// <param name="automaticallySetHttpClientWithIoc"></param>
-        /// <param name="routesBaseAddress"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <param name="automaticallySetHttpClientWithIoc">Whether the http client is to be automatically searched with the service locator or not</param>
+        /// <param name="routesBaseAddress">The base address for the routes (in general cases, it's the name of the corresponding server controller)</param>
+        /// <exception cref="ArgumentNullException">Occurs when <paramref name="routesBaseAddress"/> is null</exception>
+        /// <exception cref="InvalidOperationException">Occurs when the http client is not registered in the service locator</exception>
         public RestfulWebClient(bool automaticallySetHttpClientWithIoc, string routesBaseAddress)
         {
             if (routesBaseAddress is null)
@@ -41,12 +52,11 @@ namespace APIBase.ASPTools.Client
         }
 
         /// <summary>
-        /// 
+        /// Creates a new instance.
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <param name="routesBaseAddress"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <param name="httpClient">The provided http client</param>
+        /// <param name="routesBaseAddress">The base address for the routes (in general cases, it's the name of the corresponding server controller)</param>
+        /// <exception cref="ArgumentNullException">>Occurs when <paramref name="httpClient"/> or <paramref name="routesBaseAddress"/> is null</exception>
         public RestfulWebClient(HttpClient httpClient, string routesBaseAddress) : this(false, routesBaseAddress)
         {
             if (httpClient is null)
@@ -56,13 +66,22 @@ namespace APIBase.ASPTools.Client
             HttpClient = httpClient;
         }
 
+        /// <summary>
+        /// Deletes one item.
+        /// </summary>
+        /// <param name="id">The id of the item to be deleted</param>
+        /// <returns>The result code of the request</returns>
         public async Task<HttpStatusCode> DeleteOne(Guid id)
         {
             HttpResponseMessage response = await HttpClient.DeleteAsync($"{RoutesBaseAddress}/{id}");
             return response.StatusCode;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        /// <summary>
+        /// Gets all items.
+        /// </summary>
+        /// <returns>The result code of the request and a list of all items found</returns>
+        public async Task<(HttpStatusCode, IEnumerable<TEntity>)> GetAll()
         {
             List<TEntity> entities = null;
             HttpResponseMessage response = await HttpClient.GetAsync($"{RoutesBaseAddress}");
@@ -70,10 +89,15 @@ namespace APIBase.ASPTools.Client
             {
                 entities = await response.Content.ReadFromJsonAsync<List<TEntity>>();
             }
-            return entities;
+            return (response.StatusCode, entities);
         }
 
-        public async Task<TEntity> GetOne(Guid id)
+        /// <summary>
+        /// Gets one item.
+        /// </summary>
+        /// <param name="id">The id of the wanted item</param>
+        /// <returns>The result code of the request and the wanted item</returns>
+        public async Task<(HttpStatusCode, TEntity)> GetOne(Guid id)
         {
             TEntity entity = null;
             HttpResponseMessage response = await HttpClient.GetAsync($"{RoutesBaseAddress}/{id}");
@@ -81,30 +105,54 @@ namespace APIBase.ASPTools.Client
             {
                 entity = await response.Content.ReadFromJsonAsync<TEntity>();
             }
-            return entity;
+            return (response.StatusCode, entity);
         }
 
-        public async Task<TEntity> PatchOne(TEntity entity, JsonPatchDocument<TEntity> patchDocument)
+        /// <summary>
+        /// Partially modifies an existing item.
+        /// </summary>
+        /// <param name="id">The id of the item to be edited</param>
+        /// <param name="patchDocument">The patch document to apply to the item</param>
+        /// <returns>The result code of the request and the modified item</returns>
+        public async Task<(HttpStatusCode, TEntity)> PatchOne(Guid id, JsonPatchDocument<TEntity> patchDocument)
         {
-            HttpResponseMessage response = await HttpClient.PatchAsync($"{RoutesBaseAddress}/{entity.Id}", JsonContent.Create(patchDocument));
-            response.EnsureSuccessStatusCode();
-            entity = await response.Content.ReadFromJsonAsync<TEntity>();
-            return entity;
+            HttpResponseMessage response = await HttpClient.PatchAsync($"{RoutesBaseAddress}/{id}", JsonContent.Create(patchDocument));
+            if (response.StatusCode.IsSuccess())
+            {
+                return (response.StatusCode, await response.Content.ReadFromJsonAsync<TEntity>());
+            }
+            return (response.StatusCode, null);
         }
 
-        public async Task<Uri> PostOne(TEntity entity)
+        /// <summary>
+        /// Creates a new item.
+        /// </summary>
+        /// <param name="entity">The new item</param>
+        /// <returns>The result code of the request and its assigned id</returns>
+        public async Task<(HttpStatusCode, Guid?)> PostOne(TEntity entity)
         {
             HttpResponseMessage response = await HttpClient.PostAsJsonAsync($"{RoutesBaseAddress}", entity);
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
+            Guid resultGuid = Guid.Empty;
+            if (response.StatusCode.IsSuccess() && Guid.TryParse(response.Headers.Location?.AbsoluteUri.Split('/')[^1], out Guid guid))
+            {
+                resultGuid = guid;
+            }
+            return (response.StatusCode, resultGuid);
         }
 
-        public async Task<TEntity> PutOne(TEntity entity)
+        /// <summary>
+        /// Modifies an existing item.
+        /// </summary>
+        /// <param name="entity">The item to be edited</param>
+        /// <returns>The result code of the request and the modified item</returns>
+        public async Task<(HttpStatusCode, TEntity)> PutOne(TEntity entity)
         {
             HttpResponseMessage response = await HttpClient.PutAsJsonAsync($"{RoutesBaseAddress}/{entity.Id}", entity);
-            response.EnsureSuccessStatusCode();
-            entity = await response.Content.ReadFromJsonAsync<TEntity>();
-            return entity;
+            if (response.StatusCode.IsSuccess())
+            {
+                return (response.StatusCode, await response.Content.ReadFromJsonAsync<TEntity>());
+            }
+            return (response.StatusCode, null);
         }
     }
 }

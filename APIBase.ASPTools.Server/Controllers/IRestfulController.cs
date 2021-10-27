@@ -16,7 +16,7 @@ namespace APIBase.ASPTools.Server.Controllers
         /// <summary>
         /// Deletes one item.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">The id of the item to be deleted</param>
         /// <returns>An empty request result in case of success, an error otherwise</returns>
         Task<IActionResult> DeleteOne(Guid id);
 

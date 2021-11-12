@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -27,6 +28,64 @@ namespace APITools.Core.Ioc
             InstancesRegistry = new Dictionary<Type, IDictionary<string, object>>();
             InterfacesToImplementationsMap = new Dictionary<Type, Type>();
             SyncLock = new();
+        }
+
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="services">The service collection to put in the container</param>
+        /// <exception cref="ArgumentNullException">Occurs when <paramref name="services"/> is null</exception>
+        /// <exception cref="ServiceDescriptor">Occurs when a ServiceDescriptor is invalid</exception>
+        /// <remarks>If no factory but an instance is passed on a service descriptor, this will be the only instance of the service in the container unless you unregister it and register another one !</remarks>
+        public IocContainer(IServiceCollection services) : this()
+        {
+            if (services is null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+            lock (SyncLock)
+            {
+                foreach (ServiceDescriptor service in services)
+                {
+                    if (service.ImplementationFactory is not null)
+                    {
+                        if (Factories.ContainsKey(service.ServiceType) && Factories[service.ServiceType].ContainsKey(DefaultKey))
+                        {
+                            throw new InvalidOperationException($"There is already a factory registered for {service.ServiceType.FullName}");
+                        }
+                        if (!InterfacesToImplementationsMap.ContainsKey(service.ServiceType))
+                        {
+                            InterfacesToImplementationsMap.Add(service.ServiceType, null);
+                        }
+                        DoRegister(service.ImplementationFactory, service.ServiceType, DefaultKey);
+                    }
+                    else
+                    {
+                        if (service.ImplementationInstance is not null)
+                        {
+                            Type implementationType = service.ImplementationInstance.GetType();
+                            if (InterfacesToImplementationsMap.ContainsKey(service.ServiceType))
+                            {
+                                if (InterfacesToImplementationsMap[service.ServiceType] != implementationType)
+                                {
+                                    throw new InvalidOperationException($"There is already a class registered for {service.ServiceType.FullName}");
+                                }
+                            }
+                            else
+                            {
+                                InterfacesToImplementationsMap.Add(service.ServiceType, implementationType);
+                                ConstructorInfos.Add(implementationType, GetConstructorInfo(implementationType));
+                            }
+                            Func<object> factory = delegate { return service.ImplementationInstance; };
+                            DoRegister(factory, service.ServiceType, DefaultKey);
+                        }
+                        else
+                        {
+                            throw new NullReferenceException($"A {nameof(ServiceDescriptor)} must have at least a non-null {nameof(ServiceDescriptor.ImplementationFactory)} or a non-null {nameof(ServiceDescriptor.ImplementationInstance)}");
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -525,17 +584,29 @@ namespace APITools.Core.Ioc
         /// <param name="key">The instance key of the factory</param>
         protected void DoRegister<TService>(Type serviceType, Func<TService> factory, string key)
         {
+            DoRegister(factory, serviceType, key);
+        }
+
+        /// <summary>
+        /// Register a factory for a service.
+        /// </summary>
+        /// <typeparam name="TService">The result type of the service factory</typeparam>
+        /// <param name="serviceType">The type of the service (will serve as a type key)</param>
+        /// <param name="delegateFactory">The delegate factory to register</param>
+        /// <param name="key">The instance key of the factory</param>
+        protected void DoRegister(Delegate delegateFactory, Type serviceType, string key)
+        {
             if (Factories.ContainsKey(serviceType))
             {
                 if (Factories[serviceType].ContainsKey(key))
                 {
                     return;
                 }
-                Factories[serviceType].Add(key, factory);
+                Factories[serviceType].Add(key, delegateFactory);
             }
             else
             {
-                Dictionary<string, Delegate> list = new() { { key, factory } };
+                Dictionary<string, Delegate> list = new() { { key, delegateFactory } };
                 Factories.Add(serviceType, list);
             }
         }
@@ -589,19 +660,28 @@ namespace APITools.Core.Ioc
         /// <returns>The new instance of the service</returns>
         protected TService MakeInstance<TService>()
         {
-            Type serviceType = typeof(TService);
+            return (TService)MakeInstance(typeof(TService));
+        }
+
+        /// <summary>
+        /// Creates an instance of a service.
+        /// </summary>
+        /// <param name="serviceType">The type of the service</param>
+        /// <returns>The new instance of the service</returns>
+        protected object MakeInstance(Type serviceType)
+        {
             ConstructorInfo constructor = ConstructorInfos.ContainsKey(serviceType) ? ConstructorInfos[serviceType] : GetConstructorInfo(serviceType);
             ParameterInfo[] parameterInfos = constructor.GetParameters();
             if (parameterInfos.Length == 0)
             {
-                return (TService)constructor.Invoke(EmptyArguments);
+                return constructor.Invoke(EmptyArguments);
             }
             object[] parameters = new object[parameterInfos.Length];
             foreach (ParameterInfo parameterInfo in parameterInfos)
             {
                 parameters[parameterInfo.Position] = GetService(parameterInfo.ParameterType);
             }
-            return (TService)constructor.Invoke(parameters);
+            return constructor.Invoke(parameters);
         }
     }
 }

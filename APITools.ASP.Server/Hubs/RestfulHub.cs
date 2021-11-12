@@ -1,6 +1,6 @@
 ﻿using APITools.ASP.Base;
+using APITools.ASP.Base.C2SMessages;
 using APITools.ASP.Base.S2CMessages;
-using APITools.ASP.Requests.C2SMessages;
 using APITools.Core.Base.ComponentModel;
 using APITools.Core.Base.DAO.Models;
 using APITools.Core.Base.Ioc;

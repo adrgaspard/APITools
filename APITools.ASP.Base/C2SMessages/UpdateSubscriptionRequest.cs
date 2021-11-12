@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace APITools.ASP.Requests.C2SMessages
+namespace APITools.ASP.Base.C2SMessages
 {
     /// <summary>
     /// Represents a subscription update request to the events of a restful-like hub.

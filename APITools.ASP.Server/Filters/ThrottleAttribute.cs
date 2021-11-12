@@ -1,5 +1,5 @@
-﻿using APITools.Core.Server.Throttling;
-using CommonServiceLocator;
+﻿using APITools.Core.Ioc;
+using APITools.Core.Server.Throttling;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

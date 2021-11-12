@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace APITools.Core.Tools
+namespace APITools.Core.Base.Tools
 {
     /// <summary>
     /// Represents a set of methods to better manage the use of the Random class.

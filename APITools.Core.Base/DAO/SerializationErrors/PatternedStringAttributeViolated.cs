@@ -1,4 +1,4 @@
-﻿namespace APITools.Core.DAO.SerializationErrors
+﻿namespace APITools.Core.Base.DAO.SerializationErrors
 {
     /// <summary>
     /// Represents the serialization error when a string attribute don't match with a regex when it should be.

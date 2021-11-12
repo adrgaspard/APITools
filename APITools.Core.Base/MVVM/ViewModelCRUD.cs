@@ -1,6 +1,6 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
 
-namespace APITools.Core.MVVM
+namespace APITools.Core.Base.MVVM
 {
     public abstract class ViewModelCRUD<TEntity> : ViewModel where TEntity : class, IGuidResolvable, IValidatable
     {

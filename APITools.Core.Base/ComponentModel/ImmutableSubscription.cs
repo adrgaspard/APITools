@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace APITools.Core.ComponentModel
+namespace APITools.Core.Base.ComponentModel
 {
     /// <summary>
     /// Represents a read-only subscription to changes in a set of objects.

@@ -1,4 +1,4 @@
-﻿using APITools.Core.Ioc;
+﻿using APITools.Core.Base.Ioc;
 using APITools.Core.Server.Throttling;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

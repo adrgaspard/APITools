@@ -1,5 +1,5 @@
-﻿using APITools.Core.ComponentModel;
-using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.ComponentModel;
+using APITools.Core.Base.DAO.Models;
 using System;
 
 namespace APITools.Core.Server.DAO.Repositories

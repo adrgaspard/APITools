@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APITools.Core.Ioc
+namespace APITools.Core.Base.Ioc
 {
     /// <summary>
     /// Represents a simple Ioc container with basic functionality needed to register and resolve instances.

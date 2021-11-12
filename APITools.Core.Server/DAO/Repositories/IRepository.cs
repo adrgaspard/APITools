@@ -1,4 +1,4 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
 
 namespace APITools.Core.Server.DAO.Repositories
 {

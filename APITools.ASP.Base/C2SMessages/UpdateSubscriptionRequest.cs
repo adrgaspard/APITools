@@ -1,4 +1,4 @@
-﻿using APITools.Core.ComponentModel;
+﻿using APITools.Core.Base.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

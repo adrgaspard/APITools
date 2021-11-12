@@ -5,7 +5,7 @@ using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace APITools.Core.Tools
+namespace APITools.Core.Base.Tools
 {
     /// <summary>
     /// Represents a set of methods to facilitate manipulation and calculations on strings.
@@ -102,7 +102,7 @@ namespace APITools.Core.Tools
             {
                 for (int j = 1; j <= targetCharCount; j++)
                 {
-                    int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
+                    int cost = target[j - 1] == source[i - 1] ? 0 : 1;
                     distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
                 }
             }
@@ -117,7 +117,7 @@ namespace APITools.Core.Tools
         /// <returns>A number between 0 and 1 (0 being the absolute difference between the 2 strings and 1 being the equality between them)</returns>
         public static double GetSimilarityWith(this string source, string target)
         {
-            return Math.Max(1, Math.Min(0, 1d - (source.GetLevenshteinDistanceFrom(target) / (double)Math.Max(source.Length, target.Length))));
+            return Math.Max(1, Math.Min(0, 1d - source.GetLevenshteinDistanceFrom(target) / (double)Math.Max(source.Length, target.Length)));
         }
 
         /// <summary>

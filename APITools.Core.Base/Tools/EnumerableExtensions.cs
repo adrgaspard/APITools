@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace APITools.Core.Tools
+namespace APITools.Core.Base.Tools
 {
     /// <summary>
     /// Represents a set of methods to facilitate manipulations on collections.

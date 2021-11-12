@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APITools.Core.ComponentModel
+namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents all classes that have an editable global unique identifier.

@@ -1,4 +1,4 @@
-﻿namespace APITools.Core.Tools
+﻿namespace APITools.Core.Base.Tools
 {
     /// <summary>
     /// Represents a set of methods to facilitate certain mathematical calculations.
@@ -12,13 +12,13 @@
         /// <returns>A value that indicates whether the number is a power of 2</returns>
         public static bool IsPowerOfTwo(int number)
         {
-            return (number & (number - 1)) == 0 && number > 0;
+            return (number & number - 1) == 0 && number > 0;
         }
 
         /// <inheritdoc cref="IsPowerOfTwo(int)"/>
         public static bool IsPowerOfTwo(long number)
         {
-            return (number & (number - 1)) == 0 && number > 0;
+            return (number & number - 1) == 0 && number > 0;
         }
     }
 }

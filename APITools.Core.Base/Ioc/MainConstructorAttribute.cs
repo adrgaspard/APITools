@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APITools.Core.Ioc
+namespace APITools.Core.Base.Ioc
 {
     /// <summary>
     /// When used with the Ioc container, specifies which constructor, should be used to instantiate when GetInstance is called. If there is only one constructor in the class, this attribute is not needed.

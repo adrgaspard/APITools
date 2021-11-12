@@ -1,4 +1,4 @@
-﻿using APITools.Core.DAO.Entities.Identity;
+﻿using APITools.Core.Base.DAO.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 

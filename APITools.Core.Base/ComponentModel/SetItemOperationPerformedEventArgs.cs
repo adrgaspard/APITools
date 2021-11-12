@@ -1,9 +1,9 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace APITools.Core.ComponentModel
+namespace APITools.Core.Base.ComponentModel
 {
     /// <summary>
     /// Represents an operation performed in a set of items

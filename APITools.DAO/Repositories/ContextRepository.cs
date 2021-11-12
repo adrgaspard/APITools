@@ -1,4 +1,5 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
+using APITools.Core.Base.DAO.SerializationErrors;
 using APITools.Core.DAO.SerializationErrors;
 using APITools.Core.Server.DAO.Repositories;
 using APITools.DAO.Tools;

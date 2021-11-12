@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace APITools.Core.DAO.Models
+namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents the base class for all classes representing entities that can be saved in a database.

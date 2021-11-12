@@ -1,10 +1,10 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace APITools.Core.DAO.Entities.Identity
+namespace APITools.Core.Base.DAO.Entities.Identity
 {
     /// <summary>
     /// Represents a role in the identity system, adapted to to the rest of the components.

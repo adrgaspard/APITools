@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace APITools.Core.DAO.SerializationErrors
+namespace APITools.Core.Base.DAO.SerializationErrors
 {
     /// <summary>
     /// Represents the base class for all classes that represents errors that relate to many specific properties during serialization tests.

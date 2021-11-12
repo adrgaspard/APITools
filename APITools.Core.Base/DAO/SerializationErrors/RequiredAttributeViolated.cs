@@ -1,4 +1,4 @@
-﻿namespace APITools.Core.DAO.SerializationErrors
+﻿namespace APITools.Core.Base.DAO.SerializationErrors
 {
     /// <summary>
     /// Represents the serialization error when a required attribute is null (it shouldn't be).

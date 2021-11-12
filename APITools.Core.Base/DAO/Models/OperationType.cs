@@ -1,4 +1,4 @@
-﻿namespace APITools.Core.DAO.Models
+﻿namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents all basic types of operations possibles in a set of unordered items

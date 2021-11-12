@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace APITools.Core.Ioc
+namespace APITools.Core.Base.Ioc
 {
     /// <summary>
     /// A Ioc container with basic functionality needed to register and resolve instances.
@@ -646,7 +646,7 @@ namespace APITools.Core.Ioc
                 }
                 return first;
             }
-            if (constructorInfos.Length == 0 || (constructorInfos.Length == 1 && !constructorInfos[0].IsPublic))
+            if (constructorInfos.Length == 0 || constructorInfos.Length == 1 && !constructorInfos[0].IsPublic)
             {
                 throw new InvalidOperationException($"The type {resolveTo.Name} has no public constructor");
             }

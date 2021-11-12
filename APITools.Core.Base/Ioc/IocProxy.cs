@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace APITools.Core.Ioc
+namespace APITools.Core.Base.Ioc
 {
     /// <summary>
     /// Represents a read-only Ioc container with basic functionality needed to resolve instances.

@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Linq;
 
-namespace APITools.Core.Tools
+namespace APITools.Core.Base.Tools
 {
     /// <summary>
     /// Represents a set of methods to retrieve some values from the configuration file.

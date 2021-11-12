@@ -1,4 +1,4 @@
-﻿namespace APITools.Core.DAO.SerializationErrors
+﻿namespace APITools.Core.Base.DAO.SerializationErrors
 {
     /// <summary>
     /// Represents the base class for all classes that represents errors during serialization tests.

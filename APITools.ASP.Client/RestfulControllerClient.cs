@@ -1,6 +1,6 @@
 ﻿using APITools.ASP.Base;
-using APITools.Core.DAO.Models;
-using APITools.Core.Ioc;
+using APITools.Core.Base.DAO.Models;
+using APITools.Core.Base.Ioc;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;

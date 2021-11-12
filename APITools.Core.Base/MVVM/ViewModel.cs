@@ -2,7 +2,7 @@
 using Microsoft.Toolkit.Mvvm.Messaging;
 using System;
 
-namespace APITools.Core.MVVM
+namespace APITools.Core.Base.MVVM
 {
     /// <summary>
     /// Represents the base class for all the viewmodels classes.

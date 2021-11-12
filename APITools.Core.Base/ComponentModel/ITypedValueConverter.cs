@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace APITools.Core.ComponentModel
+namespace APITools.Core.Base.ComponentModel
 {
     /// <summary>
     /// Provides a way to apply custom logic to a binding.

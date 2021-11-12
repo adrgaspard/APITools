@@ -1,8 +1,8 @@
-﻿using APITools.Core.DAO.SerializationErrors;
+﻿using APITools.Core.Base.DAO.SerializationErrors;
 using System;
 using System.Text.Json.Serialization;
 
-namespace APITools.Core.DAO.Models
+namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents a result of a test or a serialization test on an entity.

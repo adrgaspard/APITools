@@ -1,4 +1,4 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
 using APITools.Core.Server.DAO.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;

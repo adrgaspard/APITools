@@ -1,7 +1,6 @@
-﻿using APITools.Core.ComponentModel;
-using System;
+﻿using System;
 
-namespace APITools.Core.DAO.Models
+namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents all the classes that must be adapted to the format of the hierarchical chain of the Entity class.

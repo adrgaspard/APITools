@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APITools.Core.ComponentModel
+namespace APITools.Core.Base.ComponentModel
 {
     /// <summary>
     /// Informs when any write operation is done on the object's set.

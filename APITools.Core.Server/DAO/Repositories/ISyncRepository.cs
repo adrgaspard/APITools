@@ -1,4 +1,4 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

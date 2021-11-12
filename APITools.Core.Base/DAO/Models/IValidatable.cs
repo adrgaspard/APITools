@@ -1,4 +1,4 @@
-﻿namespace APITools.Core.DAO.Models
+﻿namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents any object that can be validated for a potential add/update/delete in a serialization context.

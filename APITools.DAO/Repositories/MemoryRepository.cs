@@ -1,7 +1,8 @@
-﻿using APITools.Core.DAO.Models;
+﻿using APITools.Core.Base.DAO.Models;
+using APITools.Core.Base.DAO.SerializationErrors;
+using APITools.Core.Base.Tools;
 using APITools.Core.DAO.SerializationErrors;
 using APITools.Core.Server.DAO.Repositories;
-using APITools.Core.Tools;
 using APITools.DAO.Tools;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;

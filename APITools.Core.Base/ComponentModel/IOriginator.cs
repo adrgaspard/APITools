@@ -1,4 +1,4 @@
-﻿namespace APITools.Core.ComponentModel
+﻿namespace APITools.Core.Base.ComponentModel
 {
     /// <summary>
     /// Represents a way to without violating encapsulation, capture and externalize an object's internal state so that the object can be restored to this state later.

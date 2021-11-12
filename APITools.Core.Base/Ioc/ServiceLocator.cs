@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APITools.Core.Ioc
+namespace APITools.Core.Base.Ioc
 {
     /// <summary>
     /// Represents the entry point for the service locator.

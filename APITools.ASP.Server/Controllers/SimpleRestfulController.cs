@@ -1,6 +1,6 @@
-﻿using APITools.Core.ComponentModel;
-using APITools.Core.DAO.Models;
-using APITools.Core.Ioc;
+﻿using APITools.Core.Base.ComponentModel;
+using APITools.Core.Base.DAO.Models;
+using APITools.Core.Base.Ioc;
 using APITools.Core.Server.DAO.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

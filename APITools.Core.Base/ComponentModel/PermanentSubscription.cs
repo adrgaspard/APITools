@@ -1,10 +1,10 @@
-﻿using APITools.Core.Tools;
+﻿using APITools.Core.Base.Tools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace APITools.Core.ComponentModel
+namespace APITools.Core.Base.ComponentModel
 {
     /// <summary>
     /// Represents a permanent subscription to changes in a set of objects.

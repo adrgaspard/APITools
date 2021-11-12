@@ -1,9 +1,8 @@
-﻿using APITools.Core.ComponentModel;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace APITools.Core.DAO.Models
+namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents an adapter for all classes to be adapted to the hierarchy chain of the Entity class.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace APITools.Core.Ioc
+namespace APITools.Core.Base.Ioc
 {
     public interface IServiceLocator : IServiceProvider
     {

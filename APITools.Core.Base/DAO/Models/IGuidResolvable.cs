@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APITools.Core.DAO.Models
+namespace APITools.Core.Base.DAO.Models
 {
     /// <summary>
     /// Represents all classes that have an global unique identifier.

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
+using static APITools.Core.Base.DAO.Models.SerializationResultBuilder;
 
 namespace APITools.Core.Base.DAO.Entities.Identity
 {
@@ -63,13 +64,13 @@ namespace APITools.Core.Base.DAO.Entities.Identity
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
         public virtual SerializationResult CanBeDeleted()
         {
-            return new(this, null);
+            return Ok(this);
         }
 
         /// <inheritdoc cref="IValidatable.CanBeSavedOrUpdated"/>
         public virtual SerializationResult CanBeSavedOrUpdated()
         {
-            return new(this, null);
+            return Ok(this);
         }
 
         /// <inheritdoc cref="Entity.Equals(IGuidResolvable)"/>

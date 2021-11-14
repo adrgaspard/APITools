@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using static APITools.Core.Base.DAO.Models.SerializationResultBuilder;
 
 namespace APITools.Core.Base.DAO.Entities.Identity
@@ -17,13 +16,12 @@ namespace APITools.Core.Base.DAO.Entities.Identity
         /// </summary>
         public User()
         {
-            Adapter = new EntityAdapter<User>(this);
+            Id = Guid.Empty;
         }
 
-        /// <inheritdoc cref="IAdaptedEntity{TAdapted}.Adapter"/>
-        [JsonIgnore]
+        /// <inheritdoc cref="IAdaptedEntity{TAdapted}.ComputedId"/>
         [NotMapped]
-        public EntityAdapter<User> Adapter { get; protected init; }
+        public Guid ComputedId => Id;
 
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
         public virtual SerializationResult CanBeDeleted()
@@ -35,6 +33,11 @@ namespace APITools.Core.Base.DAO.Entities.Identity
         public virtual SerializationResult CanBeSavedOrUpdated()
         {
             return Ok(this);
+        }
+
+        /// <inheritdoc cref="IAdaptedEntity{TAdapted}.ComputesId"/>
+        public void ComputesId()
+        {
         }
 
         /// <inheritdoc cref="Entity.Equals(IGuidResolvable)"/>

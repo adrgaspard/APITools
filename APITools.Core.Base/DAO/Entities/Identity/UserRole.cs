@@ -1,14 +1,15 @@
 ﻿using APITools.Core.Base.DAO.Models;
 using APITools.Core.Base.Tools;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
-using System.Text.Json.Serialization;
 using static APITools.Core.Base.DAO.Models.SerializationResultBuilder;
 
 namespace APITools.Core.Base.DAO.Entities.Identity
 {
+    [Index(nameof(ComputedId), IsUnique = true)]
     public class UserRole : IdentityUserRole<Guid>, IAdaptedEntity<UserRole>
     {
         private static readonly HashAlgorithm _hashAlgorithm = SHA512.Create();
@@ -19,7 +20,7 @@ namespace APITools.Core.Base.DAO.Entities.Identity
         /// </summary>
         public UserRole()
         {
-            Adapter = new EntityAdapter<UserRole>(this);
+            _id = Guid.Empty;
         }
 
         /// <inheritdoc cref="IdentityUserRole{TKey}.UserId"/>
@@ -29,7 +30,7 @@ namespace APITools.Core.Base.DAO.Entities.Identity
             set
             {
                 base.UserId = value;
-                EditId();
+                ComputesId();
             }
         }
 
@@ -40,24 +41,37 @@ namespace APITools.Core.Base.DAO.Entities.Identity
             set
             {
                 base.RoleId = value;
-                EditId();
+                ComputesId();
             }
         }
 
         /// <summary>
-        /// Sets the global unique identifier of the entity.
+        /// Gets or sets the computed global unique identifier of the entity.
         /// </summary>
-        /// <exception cref="NotSupportedException">Occurs when the setter is called</exception>
-        public Guid Id
+        /// <remarks>
+        /// If the implementation has a mapped "Id" property of another type than Guid, the IGuidResolvable.Id property must be not mapped and must redirect on this one. Also, a unique must be set on this property.
+        /// Else, this property must be not mapped and redirects on IGuidResolvable.Id.
+        /// In all cases, this property and the IGuidResolvable property must always have the same value.
+        /// </remarks>
+        public Guid ComputedId
         {
             get => _id;
-            set => throw new NotSupportedException("The Id of the entity can't be modified on it's Guid form");
+            set
+            {
+                if (_id != Guid.Empty)
+                {
+                    throw new NotSupportedException("The Id of the entity can't be modified on it's Guid form");
+                }
+                _id = value;
+            }
         }
 
-        /// <inheritdoc cref="IAdaptedEntity{TAdapted}.Adapter"/>
-        [JsonIgnore]
+        /// <summary>
+        /// Gets the global unique identifier of the entity.
+        /// </summary>
+        /// <remarks>Redirects on the computed id</remarks>
         [NotMapped]
-        public EntityAdapter<UserRole> Adapter { get; protected init; }
+        public Guid Id => ComputedId;
 
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
         public virtual SerializationResult CanBeDeleted()
@@ -77,10 +91,8 @@ namespace APITools.Core.Base.DAO.Entities.Identity
             return Entity.AreEqual(this, other);
         }
 
-        /// <summary>
-        /// Computes and changes the id of the entity.
-        /// </summary>
-        protected virtual void EditId()
+        /// <inheritdoc cref="IAdaptedEntity{TAdapted}.ComputesId"/>
+        public void ComputesId()
         {
             byte[] userId = UserId.ToByteArray();
             byte[] roleId = RoleId.ToByteArray();

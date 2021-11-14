@@ -7,12 +7,21 @@ namespace APITools.Core.Base.DAO.Models
     /// </summary>
     /// <typeparam name="TAdapted">The type to adapt to the hierarchy chain of the Entity class</typeparam>
     /// <see cref="Entity"/>
-    public interface IAdaptedEntity<TAdapted> : IValidatable, IGuidResolvable, IGuidWriteable, IEquatable<IGuidResolvable> where TAdapted : IAdaptedEntity<TAdapted>
+    public interface IAdaptedEntity<TAdapted> : IValidatable, IGuidResolvable, IEquatable<IGuidResolvable> where TAdapted : IAdaptedEntity<TAdapted>
     {
         /// <summary>
-        /// Gets or sets the adapter to make the object compatible with the hierarchical chain of the Entity class.
+        /// Gets the computed id for the adapted entity.
         /// </summary>
-        /// <see cref="Entity"/>
-        EntityAdapter<TAdapted> Adapter { get; }
+        /// <remarks>
+        /// If the implementation has a mapped "Id" property of another type than Guid, the IGuidResolvable.Id property must be not mapped and must redirect on this one. Also, a unique must be set on this property.
+        /// Else, this property must be not mapped and redirects on IGuidResolvable.Id.
+        /// In all cases, this property and the IGuidResolvable property must always have the same value.
+        /// </remarks>
+        Guid ComputedId { get; }
+
+        /// <summary>
+        /// Computes and changes the id of the entity if needed.
+        /// </summary>
+        void ComputesId();
     }
 }

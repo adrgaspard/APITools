@@ -1,12 +1,13 @@
 ﻿using APITools.Core.Base.DAO.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using static APITools.Core.Base.DAO.Models.SerializationResultBuilder;
 
 namespace APITools.Core.Base.DAO.Entities.Identity
 {
+    [Index(nameof(ComputedId), IsUnique = true)]
     public class UserClaim : IdentityUserClaim<Guid>, IAdaptedEntity<UserClaim>
     {
         private Guid _id;
@@ -16,7 +17,7 @@ namespace APITools.Core.Base.DAO.Entities.Identity
         /// </summary>
         public UserClaim()
         {
-            Adapter = new EntityAdapter<UserClaim>(this);
+            _id = Guid.Empty;
         }
 
         /// <inheritdoc cref="IdentityUserClaim{TKey}.Id"/>
@@ -33,20 +34,32 @@ namespace APITools.Core.Base.DAO.Entities.Identity
         }
 
         /// <summary>
-        /// Gets the global unique identifier of the entity.
+        /// Gets or sets the computed global unique identifier of the entity.
         /// </summary>
-        Guid IGuidResolvable.Id => _id;
+        /// <remarks>
+        /// If the implementation has a mapped "Id" property of another type than Guid, the IGuidResolvable.Id property must be not mapped and must redirect on this one. Also, a unique must be set on this property.
+        /// Else, this property must be not mapped and redirects on IGuidResolvable.Id.
+        /// In all cases, this property and the IGuidResolvable property must always have the same value.
+        /// </remarks>
+        public Guid ComputedId
+        {
+            get => _id;
+            set
+            {
+                if (_id != Guid.Empty)
+                {
+                    throw new NotSupportedException("The Id of the entity can't be modified on it's Guid form");
+                }
+                _id = value;
+            }
+        }
 
         /// <summary>
-        /// Sets the global unique identifier of the entity.
+        /// Gets the global unique identifier of the entity.
         /// </summary>
-        /// <exception cref="NotSupportedException">Occurs when called</exception>
-        Guid IGuidWriteable.Id { set => throw new NotSupportedException("The Id of the entity can't be modified on it's Guid form"); }
-
-        /// <inheritdoc cref="IAdaptedEntity{TAdapted}.Adapter"/>
-        [JsonIgnore]
+        /// <remarks>Redirects on the computed id</remarks>
         [NotMapped]
-        public EntityAdapter<UserClaim> Adapter { get; protected init; }
+        Guid IGuidResolvable.Id => ComputedId;
 
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
         public virtual SerializationResult CanBeDeleted()
@@ -64,6 +77,11 @@ namespace APITools.Core.Base.DAO.Entities.Identity
         public bool Equals(IGuidResolvable other)
         {
             return Entity.AreEqual(this, other);
+        }
+
+        /// <inheritdoc cref="IAdaptedEntity{TAdapted}.ComputesId"/>
+        public void ComputesId()
+        {
         }
     }
 }

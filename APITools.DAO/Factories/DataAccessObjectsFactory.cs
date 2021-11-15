@@ -63,6 +63,7 @@ namespace APITools.DAO.Factories
             {
                 RepositorySourceType.DbContext => new ContextRepository<TEntity>(Context),
                 RepositorySourceType.Memory => new MemoryRepository<TEntity>(Context.Model.GetEntityTypes()),
+                RepositorySourceType.Ban => new ProhibitorRepository<TEntity>(),
                 _ => throw new NotSupportedException($"The source type {sourceType} is not supported by the {nameof(DataAccessObjectsFactory)}"),
             };
         }

@@ -6,6 +6,7 @@
     public enum RepositorySourceType
     {
         DbContext = 0,
-        Memory = 1
+        Memory = 1,
+        Ban = 2
     }
 }

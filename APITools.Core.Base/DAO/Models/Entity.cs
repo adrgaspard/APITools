@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static APITools.Core.Base.DAO.Models.SerializationResultBuilder;
 
 namespace APITools.Core.Base.DAO.Models
 {
@@ -67,13 +68,13 @@ namespace APITools.Core.Base.DAO.Models
         /// <inheritdoc cref="IValidatable.CanBeDeleted"/>
         public virtual SerializationResult CanBeDeleted()
         {
-            return new(this, null);
+            return Ok(this);
         }
 
         /// <inheritdoc cref="IValidatable.CanBeSavedOrUpdated"/>
         public virtual SerializationResult CanBeSavedOrUpdated()
         {
-            return new(this, null);
+            return Ok(this);
         }
 
         /// <summary>

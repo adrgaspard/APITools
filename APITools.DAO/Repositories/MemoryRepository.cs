@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using static APITools.Core.Base.DAO.Models.SerializationResultBuilder;
 
 namespace APITools.DAO.Repositories
 {
@@ -84,9 +85,9 @@ namespace APITools.DAO.Repositories
             }
             if (!IsInDatabase(entity))
             {
-                return new(entity, new NotFoundInDatabase());
+                return Error(entity, new NotFoundInDatabase());
             }
-            return new(entity, null);
+            return Ok(entity);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanDeleteAsync(TEntity)"/>
@@ -99,9 +100,9 @@ namespace APITools.DAO.Repositories
             }
             if (!await IsInDatabaseAsync(entity))
             {
-                return new(entity, new NotFoundInDatabase());
+                return Error(entity, new NotFoundInDatabase());
             }
-            return new(entity, null);
+            return Ok(entity);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanDeleteRange(IEnumerable{TEntity})"/>
@@ -117,9 +118,9 @@ namespace APITools.DAO.Repositories
             }
             if (IsAnyNotInDatabase(entities) is TEntity notFoundEntity)
             {
-                return new(notFoundEntity, new NotFoundInDatabase());
+                return Error(notFoundEntity, new NotFoundInDatabase());
             }
-            return new(null, null);
+            return Ok(null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanDeleteRangeAsync(IEnumerable{TEntity})"/>
@@ -135,9 +136,9 @@ namespace APITools.DAO.Repositories
             }
             if (await IsAnyNotInDatabaseAsync(entities) is TEntity notFoundEntity)
             {
-                return new(notFoundEntity, new NotFoundInDatabase());
+                return Error(notFoundEntity, new NotFoundInDatabase());
             }
-            return new(null, null);
+            return Ok(null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanSave(TEntity)"/>
@@ -150,17 +151,17 @@ namespace APITools.DAO.Repositories
             }
             if (IsInDatabase(entity))
             {
-                return new(entity, new AlreadyExistsInDatabase());
+                return Error(entity, new AlreadyExistsInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                return new(entity, requiredError);
+                return Error(entity, requiredError);
             }
             if (AreUniqueIndexesRespected(entity, null) is SerializationError indexError)
             {
-                return new(entity, indexError);
+                return Error(entity, indexError);
             }
-            return new(entity, null);
+            return Ok(entity);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanSaveAsync(TEntity)"/>
@@ -173,17 +174,17 @@ namespace APITools.DAO.Repositories
             }
             if (await IsInDatabaseAsync(entity))
             {
-                return new(entity, new AlreadyExistsInDatabase());
+                return Error(entity, new AlreadyExistsInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                return new(entity, requiredError);
+                return Error(entity, requiredError);
             }
             if (await AreUniqueIndexesRespectedAsync(entity, null) is SerializationError indexError)
             {
-                return new(entity, indexError);
+                return Error(entity, indexError);
             }
-            return new(entity, null);
+            return Ok(entity);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanSaveRange(IEnumerable{TEntity})"/>
@@ -199,23 +200,23 @@ namespace APITools.DAO.Repositories
             }
             if (IsAnyInDatabase(entities) is TEntity existingEntity)
             {
-                return new(existingEntity, new AlreadyExistsInDatabase());
+                return Error(existingEntity, new AlreadyExistsInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    return new(entity, requiredError);
+                    return Error(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (AreUniqueIndexesRespected(entity, entities) is SerializationError indexError)
                 {
-                    return new(entity, indexError);
+                    return Error(entity, indexError);
                 }
             }
-            return new(null, null);
+            return Ok(null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanSaveRangeAsync(IEnumerable{TEntity})"/>
@@ -231,23 +232,23 @@ namespace APITools.DAO.Repositories
             }
             if (await IsAnyInDatabaseAsync(entities) is TEntity existingEntity)
             {
-                return new(existingEntity, new AlreadyExistsInDatabase());
+                return Error(existingEntity, new AlreadyExistsInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    return new(entity, requiredError);
+                    return Error(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (await AreUniqueIndexesRespectedAsync(entity, entities) is SerializationError indexError)
                 {
-                    return new(entity, indexError);
+                    return Error(entity, indexError);
                 }
             }
-            return new(null, null);
+            return Ok(null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanUpdate(TEntity)"/>
@@ -260,17 +261,17 @@ namespace APITools.DAO.Repositories
             }
             if (!IsInDatabase(entity))
             {
-                return new(entity, new NotFoundInDatabase());
+                return Error(entity, new NotFoundInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                return new(entity, requiredError);
+                return Error(entity, requiredError);
             }
             if (AreUniqueIndexesRespected(entity, null) is SerializationError indexError)
             {
-                return new(entity, indexError);
+                return Error(entity, indexError);
             }
-            return new(entity, null);
+            return Ok(entity);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanUpdateAsync(TEntity)"/>
@@ -283,17 +284,17 @@ namespace APITools.DAO.Repositories
             }
             if (!await IsInDatabaseAsync(entity))
             {
-                return new(entity, new NotFoundInDatabase());
+                return Error(entity, new NotFoundInDatabase());
             }
             if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
             {
-                return new(entity, requiredError);
+                return Error(entity, requiredError);
             }
             if (await AreUniqueIndexesRespectedAsync(entity, null) is SerializationError indexError)
             {
-                return new(entity, indexError);
+                return Error(entity, indexError);
             }
-            return new(entity, null);
+            return Ok(entity);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.CanUpdateRange(IEnumerable{TEntity})"/>
@@ -309,23 +310,23 @@ namespace APITools.DAO.Repositories
             }
             if (IsAnyNotInDatabase(entities) is TEntity notFoundEntity)
             {
-                return new(notFoundEntity, new NotFoundInDatabase());
+                return Error(notFoundEntity, new NotFoundInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    return new(entity, requiredError);
+                    return Error(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (AreUniqueIndexesRespected(entity, entities) is SerializationError indexError)
                 {
-                    return new(entity, indexError);
+                    return Error(entity, indexError);
                 }
             }
-            return new(null, null);
+            return Ok(null);
         }
 
         /// <inheritdoc cref="IAsyncRepository{TEntity}.CanUpdateRangeAsync(IEnumerable{TEntity})"/>
@@ -341,23 +342,23 @@ namespace APITools.DAO.Repositories
             }
             if (await IsAnyNotInDatabaseAsync(entities) is TEntity notFoundEntity)
             {
-                return new(notFoundEntity, new NotFoundInDatabase());
+                return Error(notFoundEntity, new NotFoundInDatabase());
             }
             foreach (TEntity entity in entities)
             {
                 if (AreRequiredPropertiesFilled(entity) is SerializationError requiredError)
                 {
-                    return new(entity, requiredError);
+                    return Error(entity, requiredError);
                 }
             }
             foreach (TEntity entity in entities)
             {
                 if (await AreUniqueIndexesRespectedAsync(entity, entities) is SerializationError indexError)
                 {
-                    return new(entity, indexError);
+                    return Error(entity, indexError);
                 }
             }
-            return new(null, null);
+            return Ok(null);
         }
 
         /// <inheritdoc cref="ISyncRepository{TEntity}.Delete(TEntity)"/>

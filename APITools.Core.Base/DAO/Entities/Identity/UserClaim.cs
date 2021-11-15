@@ -7,6 +7,9 @@ using static APITools.Core.Base.DAO.Models.SerializationResultBuilder;
 
 namespace APITools.Core.Base.DAO.Entities.Identity
 {
+    /// <summary>
+    /// Represents a user claim in the identity system, adapted to to the rest of the components.
+    /// </summary>
     [Index(nameof(ComputedId), IsUnique = true)]
     public class UserClaim : IdentityUserClaim<Guid>, IAdaptedEntity<UserClaim>
     {

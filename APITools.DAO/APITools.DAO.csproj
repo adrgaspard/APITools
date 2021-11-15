@@ -12,7 +12,7 @@
 		</Description>
 		<Copyright>Copyright (c) 2021 Gaspard Andrieu</Copyright>
 		<Authors>Gaspard Andrieu</Authors>
-		<Version>0.1.1</Version>
+		<Version>0.1.2</Version>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageTags>api; asp.net; ef; core; entity; framework; asp; net; tools; signalr</PackageTags>

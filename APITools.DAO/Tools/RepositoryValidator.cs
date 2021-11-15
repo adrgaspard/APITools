@@ -51,7 +51,8 @@ namespace APITools.DAO.Tools
                 foreach (KeyValuePair<Type, object> entry in repositories.Where(pair => pair.Key is not null && pair.Key.IsConstructedGenericType))
                 {
                     Type entryKeyGenericType = entry.Key.GetGenericTypeDefinition();
-                    if ((entryKeyGenericType.IsSubclassOf(typeof(ISyncRepository<>)) || entryKeyGenericType.IsSubclassOf(typeof(IAsyncRepository<>))) && (entry.Value is null || entry.Key.GetGenericArguments().FirstOrDefault().Equals(entry.Value.GetType().GetGenericArguments().FirstOrDefault())))
+                    List<Type> entryInterfaces = entryKeyGenericType.GetInterfaces().Where(type => type.IsGenericType).Select(type => type.GetGenericTypeDefinition()).ToList();
+                    if ((entryInterfaces.Contains(typeof(ISyncRepository<>)) || entryInterfaces.Contains(typeof(IAsyncRepository<>))) && (entry.Value is null || entry.Key.GetGenericArguments().FirstOrDefault().Equals(entry.Value.GetType().GetGenericArguments().FirstOrDefault())))
                     {
                         validatedRepositories.Add(entry.Key, entry.Value);
                     }
@@ -66,10 +67,16 @@ namespace APITools.DAO.Tools
         /// <returns>A collection of all entity types found in the model without a valid repository</returns>
         protected IReadOnlyCollection<Type> GetEntityTypesWithoutRepository()
         {
-            IEnumerable<Type> types = Context.Model.GetEntityTypes().Where(entityType => !entityType.HasSharedClrType).Select(entityType => entityType.ClrType);
-            List<Type> result = new(types.Where(type => !type.IsSubclassOf(typeof(IGuidResolvable)) || !type.IsSubclassOf(typeof(IValidatable))));
-            foreach (Type entityType in types.Where(type => !result.Contains(type)))
+            List<Type> result = new();
+            List<Type> types = Context.Model.GetEntityTypes().Where(entityType => !entityType.HasSharedClrType).Select(entityType => entityType.ClrType).ToList();
+            foreach (Type entityType in types)
             {
+                List<Type> entityTypeInterfaces = entityType.GetInterfaces().ToList();
+                if (!entityTypeInterfaces.Contains(typeof(IGuidResolvable)) || !entityTypeInterfaces.Contains(typeof(IValidatable)))
+                {
+                    result.Add(entityType);
+                    continue;
+                }
                 Type repositoryType = typeof(IRepository<>).MakeGenericType(new[] { entityType });
                 Type syncRepositoryType = typeof(ISyncRepository<>).MakeGenericType(new[] { entityType });
                 Type asyncRepositoryType = typeof(IAsyncRepository<>).MakeGenericType(new[] { entityType });

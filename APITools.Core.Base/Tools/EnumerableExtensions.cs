@@ -14,7 +14,7 @@ namespace APITools.Core.Base.Tools
         /// <typeparam name="TItem">Type of items</typeparam>
         /// <param name="source">The source collection</param>
         /// <param name="toAdd">Items to add to the source collection</param>
-        public static void AddRange<TItem>(this IList<TItem> source, IEnumerable<TItem> toAdd)
+        public static void AddRange<TItem>(this ICollection<TItem> source, IEnumerable<TItem> toAdd)
         {
             foreach (TItem item in toAdd)
             {
@@ -28,7 +28,7 @@ namespace APITools.Core.Base.Tools
         /// <typeparam name="TItem">Type of items</typeparam>
         /// <param name="source">The source collection</param>
         /// <returns></returns>
-        public static bool ContainsOnlyUniqueElements<TItem>(this IEnumerable<TItem> source)
+        public static bool ContainsOnlyUniqueElements<TItem>(this ICollection<TItem> source)
         {
             List<TItem> alreadyFound = new();
             foreach (TItem item in source)
@@ -48,7 +48,7 @@ namespace APITools.Core.Base.Tools
         /// <typeparam name="TItem">Type of items</typeparam>
         /// <param name="source">The source collection</param>
         /// <param name="toRemove">Items to remove from the source collection</param>
-        public static void RemoveRange<TItem>(this IList<TItem> source, IEnumerable<TItem> toRemove)
+        public static void RemoveRange<TItem>(this ICollection<TItem> source, IEnumerable<TItem> toRemove)
         {
             foreach (TItem item in toRemove)
             {

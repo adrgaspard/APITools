@@ -89,9 +89,21 @@ namespace APITools.ASP.Server.Controllers
             {
                 return NotFound();
             }
+            if (patchDocument.Operations.Any(operation => operation.path == $"/{nameof(IGuidResolvable.Id)}" || operation.path == nameof(IGuidResolvable.Id)))
+            {
+                return BadRequest("Error : the Id can't be modified !");
+            }
             TMementoDTO oldMemento = entity.CreateMemento();
             TMementoDTO newMemento = entity.CreateMemento();
-            patchDocument.ApplyTo(newMemento);
+            JsonPatchError error = null;
+            patchDocument.ApplyTo(newMemento, (jsonPatchError) =>
+            {
+                error = jsonPatchError;
+            });
+            if (error is not null)
+            {
+                return BadRequest(error);
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -126,13 +138,13 @@ namespace APITools.ASP.Server.Controllers
         }
 
         /// <inheritdoc cref="IRestfulController{TEntity}.PutOne(Guid, TEntity)"/>
-        public virtual async Task<IActionResult> PutOne([FromRoute] Guid id, [FromBody] TMementoDTO entity)
+        public virtual async Task<IActionResult> PutOne([FromBody] TMementoDTO entity)
         {
             if (entity is null)
             {
                 return BadRequest(ModelState);
             }
-            TEntity trackedEntity = await Repository.FindOneAsync(id);
+            TEntity trackedEntity = await Repository.FindOneAsync(entity.Id);
             if (trackedEntity is null)
             {
                 return NotFound();

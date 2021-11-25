@@ -51,9 +51,8 @@ namespace APITools.ASP.Server.Controllers
         /// <summary>
         /// Modifies an existing item.
         /// </summary>
-        /// <param name="id">The id of the item to be edited</param>
         /// <param name="entity">The new version of the item</param>
         /// <returns>An empty request result in case of success, an error otherwise</returns>
-        Task<IActionResult> PutOne(Guid id, TEntity entity);
+        Task<IActionResult> PutOne(TEntity entity);
     }
 }

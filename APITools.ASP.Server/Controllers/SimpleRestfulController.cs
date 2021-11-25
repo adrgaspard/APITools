@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace APITools.ASP.Server.Controllers
@@ -87,8 +88,20 @@ namespace APITools.ASP.Server.Controllers
             {
                 return NotFound();
             }
+            if (patchDocument.Operations.Any(operation => operation.path == $"/{nameof(IGuidResolvable.Id)}" || operation.path == nameof(IGuidResolvable.Id)))
+            {
+                return BadRequest("Error : the Id can't be modified !");
+            }
             TMemento memento = entity.CreateMemento();
-            patchDocument.ApplyTo(entity);
+            JsonPatchError error = null;
+            patchDocument.ApplyTo(entity, (jsonPatchError) =>
+            {
+                error = jsonPatchError;
+            });
+            if (error is not null)
+            {
+                return BadRequest(error);
+            }
             if (!ModelState.IsValid)
             {
                 entity.InstallMemento(memento);
@@ -121,13 +134,13 @@ namespace APITools.ASP.Server.Controllers
         }
 
         /// <inheritdoc cref="IRestfulController{TEntity}.PutOne(Guid, TEntity)"/>
-        public virtual async Task<IActionResult> PutOne([FromRoute] Guid id, [FromBody] TEntity entity)
+        public virtual async Task<IActionResult> PutOne([FromBody] TEntity entity)
         {
             if (entity is null)
             {
                 return BadRequest(ModelState);
             }
-            TEntity trackedEntity = await Repository.FindOneAsync(id);
+            TEntity trackedEntity = await Repository.FindOneAsync(entity.Id);
             if (trackedEntity is null)
             {
                 return NotFound();
@@ -140,7 +153,7 @@ namespace APITools.ASP.Server.Controllers
                 trackedEntity.InstallMemento(memento);
                 return BadRequest(result);
             }
-            await Repository.SaveUpdateAsync(entity);
+            await Repository.SaveUpdateAsync(trackedEntity);
             return NoContent();
         }
     }
